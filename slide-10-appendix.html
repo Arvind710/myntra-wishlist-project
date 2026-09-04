@@ -437,6 +437,29 @@ svg.dg .elab{font-family:'IBM Plex Mono',monospace;font-size:9.4px;fill:var(--fa
         </tbody>
       </table>
     </div>
+
+    <div class="opanel">
+      <h4><span class="hn">D</span>How the experiment is read, and which two numbers are assumed</h4>
+      <p class="t"><b>The read.</b> User-level split, eligible saved-item views only. About
+        <b>8,400 users per arm</b> gives a 2pp lift at 80% power and 95% confidence. At current
+        volume that clears in under a day, so Add to Bag is read at <b>14 days</b> and the 30-day
+        business metric at <b>35 days</b>.</p>
+      <p class="t">That matters more than it looks. Only two rows on the slide carry a baseline at
+        all — everything else is read as exposed against holdout, which needs no prior. A holdout
+        measures the difference between two groups, so it does not matter whether the true
+        add-to-bag rate is 22% or 38%. And because the experiment reads in days, an assumed
+        baseline is replaced by a measured one almost immediately.</p>
+      <p class="t"><b><sup>a</sup> The two assumed figures.</b> Both are derived from the funnel on
+        slide 6, not from internal data, and both are instrumented on day 1:</p>
+      <ul class="t">
+        <li><b>30% add to bag</b> — the inverse of slide 6's "70% leave without bagging".</li>
+        <li><b>~9% wishlist → purchase in 30 days</b> — the same funnel with a bag-to-order rate
+          applied.</li>
+      </ul>
+      <p class="t">The <b>+2pp</b> target is the conservative read of slide 6's prize, which implies
+        +2.8pp. The <b>≥90%</b> claim-accuracy floor and the <b>≤ +0.5pp</b> returns tolerance are
+        chosen thresholds, not measured ones.</p>
+    </div>
   </div>
 
   <!-- ============================= RISKS ============================= -->
