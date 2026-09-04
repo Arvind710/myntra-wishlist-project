@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 10 appendix — Success metrics, risks &amp; GTM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#DBE1E5;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#CBD3D9;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;--ui:#4C35C4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:40px 22px 60px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:46ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:104ch}
+.sub b{color:var(--ink);font-weight:600}
+.sub a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin:0 0 14px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 18px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}
+.pane.on{display:block}
+
+.opanel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 23px;margin-bottom:12px}
+.opanel:last-child{margin-bottom:0}
+.opanel h4{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:17px;line-height:1.2;
+  letter-spacing:-.008em;margin-bottom:10px}
+.opanel h4 .hn{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.08em;color:var(--faint);margin-right:9px;vertical-align:1.5px}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:10px;max-width:114ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+code,.mono{font-family:'IBM Plex Mono',monospace;font-size:12.1px}
+code{background:#EEF2F5;padding:1px 4px;color:var(--ink)}
+
+/* generic table */
+table.st{width:100%;border-collapse:collapse;font-size:12.6px;margin-top:4px}
+table.st th{font-family:'IBM Plex Mono',monospace;font-size:9.8px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:left;
+  padding:0 12px 7px;border-bottom:1px solid var(--rule);vertical-align:bottom}
+table.st th:first-child,table.st td:first-child{padding-left:0}
+table.st td{padding:10px 12px;border-bottom:1px solid #EEF1F4;vertical-align:top;
+  color:var(--ink2);line-height:1.42}
+table.st tr:last-child td{border-bottom:none}
+table.st td.k{color:var(--ink);font-weight:600}
+table.st td.m{font-family:'IBM Plex Mono',monospace;font-size:11.6px;color:var(--ink2);
+  text-align:right;white-space:nowrap}
+table.st td b{color:var(--ink);font-weight:600}
+table.st tr.hi td{background:#F4F9FC}
+table.st tr.hi td:first-child{box-shadow:inset 3px 0 0 var(--win);padding-left:9px}
+table.st tr.tot td{border-top:1px solid var(--rule);border-bottom:none;
+  color:var(--ink);font-weight:600;padding-top:11px}
+
+/* metric tree table */
+table.mt{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:2px}
+table.mt col.c1{width:16%}table.mt col.c2{width:29%}table.mt col.c3{width:20%}
+table.mt col.c4{width:11%}table.mt col.c5{width:24%}
+table.mt th{font-family:'IBM Plex Mono',monospace;font-size:9.8px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:left;
+  padding:0 12px 7px;border-bottom:1px solid var(--rule);vertical-align:bottom}
+table.mt th:first-child,table.mt td:first-child{padding-left:0}
+table.mt td{padding:11px 12px;border-bottom:1px solid #EEF1F4;vertical-align:top;
+  color:var(--ink2);line-height:1.42}
+table.mt tr:last-child td{border-bottom:none}
+table.mt td.n{color:var(--ink);font-weight:600;padding-right:14px}
+table.mt td b{color:var(--ink);font-weight:600}
+.fm{display:block;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:11.1px;
+  line-height:1.4;color:var(--ink);background:#EEF2F5;padding:5px 7px}
+.fm span{display:block;color:var(--faint);margin-top:3px}
+.cad{font-family:'IBM Plex Mono',monospace;font-size:11.2px}
+
+/* tier band */
+.band{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink);background:#E4EAEE;padding:7px 0 7px 10px;
+  margin:20px 0 0;border-left:3px solid var(--track)}
+.band.pri{border-left-color:var(--win);color:var(--win)}
+.band.gd{border-left-color:var(--leak)}
+.band em{font-style:normal;font-weight:400;color:var(--faint);text-transform:none;
+  letter-spacing:0;margin-left:10px;font-size:10.6px}
+
+/* chips */
+.chip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:8.9px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;padding:2px 5px;margin-left:6px;
+  vertical-align:1.5px;background:#EDF1F4;color:var(--faint)}
+.chip.p{background:#DCEBF5;color:var(--win)}
+.chip.a{background:#F0EDF9;color:var(--ui)}
+
+/* diagram */
+.scroll{overflow-x:auto}
+svg.dg{display:block;width:100%;min-width:1120px;height:auto}
+svg.dg .lane{font-family:'IBM Plex Mono',monospace;font-size:9.6px;font-weight:600;
+  letter-spacing:.09em;fill:var(--faint)}
+svg.dg .bx{fill:#FAFBFC;stroke:var(--rule);stroke-width:1}
+svg.dg .bx.eng{fill:#EDF5FA;stroke:#BCD9EC}
+svg.dg .bx.out{fill:#F1F4F6;stroke:var(--track)}
+svg.dg .bt{font-family:'IBM Plex Mono',monospace;font-size:11.6px;font-weight:600;
+  fill:var(--ink);letter-spacing:.03em}
+svg.dg .bt.w{fill:var(--win)}
+svg.dg .bd{font-family:'IBM Plex Sans',sans-serif;font-size:11.2px;fill:var(--ink2)}
+svg.dg .mono{font-family:'IBM Plex Mono',monospace;font-size:9.6px;fill:var(--faint)}
+svg.dg .ln{stroke:var(--track);stroke-width:1.4;fill:none}
+svg.dg .ah{fill:var(--track)}
+svg.dg .elab{font-family:'IBM Plex Mono',monospace;font-size:9.4px;fill:var(--faint)}
+
+.ob{border-left:3px solid var(--win);background:#F5F8FA;padding:11px 13px;font-size:12.7px;
+  margin-top:13px;color:var(--ink2);line-height:1.45}
+.ob b{color:var(--ink);font-weight:600}
+.ob.warn{border-left-color:var(--leak);background:#FBF5F1}
+.ob.flat{margin-top:0;margin-bottom:13px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* pills */
+.pill{display:inline-block;text-align:center;font-family:'IBM Plex Mono',monospace;
+  font-size:10.2px;font-weight:600;letter-spacing:.07em;padding:4px 9px;
+  background:#EDF1F4;color:var(--ink2)}
+.pill.y{background:#DCEBF5;color:var(--win)}
+.pill.n{background:#F5E3D8;color:var(--leak)}
+
+.back{margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+.back a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>Slide 10 appendix</b> · Success metrics, risks &amp; GTM</div>
+    <h1>Every metric, every risk, and the plan that ships it.</h1>
+    <p class="sub">Three screens. The <b>metric tree</b> — all sixteen metrics with definition,
+      formula, instrumentation source and read cadence, and the chain that carries one tap on Add to
+      Bag all the way up to slide 4's ₹504 Cr. The <b>risk register</b> in full, each risk tagged
+      with the metric that trips first. And the <b>go-to-market</b> — four phases, who does what, and
+      the readings that say expand, pause or kill. <b>There are no targets anywhere on this page,
+      and that is deliberate:</b> Phase 0 is where the baselines come from, and the pre-launch power
+      calculation is what sets the numbers.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="metrics" type="button">METRIC TREE</button>
+    <button class="tab" data-pane="risks" type="button">RISK REGISTER</button>
+    <button class="tab" data-pane="gtm" type="button">GTM</button>
+  </div>
+
+  <!-- ============================= METRICS ============================= -->
+  <div class="pane on" id="metrics">
+
+    <div class="opanel">
+      <h4><span class="hn">A</span>How one tap on Add to Bag becomes ₹504 Cr</h4>
+      <p class="t">Left to right, nothing skipped. Each box is a real join in the data, not an
+        analogy. Boxes 3 and 4 are the deck's existing funnel — Fabric Match does not touch them; it
+        only changes how many taps enter at box 2.</p>
+      <div class="scroll">
+        <svg class="dg" viewBox="0 0 1250 206" role="img"
+             aria-label="Chain from an Add to Bag tap through the product outcome, the funnel, the business metric and money.">
+          <text class="lane" x="5"    y="12">THE EVENT</text>
+          <text class="lane" x="260"  y="12">PRODUCT OUTCOME</text>
+          <text class="lane" x="515"  y="12">THE REST OF THE FUNNEL</text>
+          <text class="lane" x="770"  y="12">BUSINESS METRIC</text>
+          <text class="lane" x="1025" y="12">MONEY</text>
+
+          <rect class="bx"     x="5"    y="24" width="220" height="140" rx="2"/>
+          <rect class="bx eng" x="260"  y="24" width="220" height="140" rx="2"/>
+          <rect class="bx out" x="515"  y="24" width="220" height="140" rx="2"/>
+          <rect class="bx out" x="770"  y="24" width="220" height="140" rx="2"/>
+          <rect class="bx eng" x="1025" y="24" width="220" height="140" rx="2"/>
+
+          <text class="bt"   x="19"   y="48">Add to Bag tap</text>
+          <text class="bd"   x="19"   y="72">One shopper taps Add to Bag</text>
+          <text class="bd"   x="19"   y="88">on an item they had saved,</text>
+          <text class="bd"   x="19"   y="104">within 24h of viewing it.</text>
+          <text class="mono" x="19"   y="150">atb_click · user × sku</text>
+
+          <text class="bt"   x="274"  y="48">Saved item → ATB</text>
+          <text class="bd"   x="274"  y="72">That tap is one unit in the</text>
+          <text class="bd"   x="274"  y="88">numerator. The metric is the</text>
+          <text class="bd"   x="274"  y="104">rate, and it is only credible</text>
+          <text class="bd"   x="274"  y="120">read as exposed − holdout.</text>
+          <text class="mono" x="274"  y="150">the primary metric</text>
+
+          <text class="bt"   x="529"  y="48">Bag → order</text>
+          <text class="bd"   x="529"  y="72">Payment succeeds — step 5 of</text>
+          <text class="bd"   x="529"  y="88">slide 3's journey. Drop-off D</text>
+          <text class="bd"   x="529"  y="104">lives here and is outside</text>
+          <text class="bd"   x="529"  y="120">what this feature can reach.</text>
+          <text class="mono" x="529"  y="150">existing funnel rate</text>
+
+          <text class="bt"   x="784"  y="48">WPC₃₀</text>
+          <text class="bd"   x="784"  y="72">A saver bought a saved item</text>
+          <text class="bd"   x="784"  y="88">inside 30 days. That is</text>
+          <text class="bd"   x="784"  y="104">slide 3's goal, word for</text>
+          <text class="bd"   x="784"  y="120">word — not a proxy for it.</text>
+          <text class="mono" x="784"  y="150">slide 3 · THE GOAL</text>
+
+          <text class="bt w" x="1039" y="48">ΔGMV</text>
+          <text class="bd"   x="1039" y="72">× ₹1,500 AOV. 280,000 such</text>
+          <text class="bd"   x="1039" y="88">orders a month is ₹42 Cr,</text>
+          <text class="bd"   x="1039" y="104">and ₹504 Cr across the</text>
+          <text class="bd"   x="1039" y="120">first full year.</text>
+          <text class="mono" x="1039" y="150">slide 4 · THE PRIZE</text>
+
+          <text class="elab" x="242"  y="190" text-anchor="middle">1 of N views</text>
+          <line class="ln" x1="228" y1="94" x2="252" y2="94"/>
+          <path class="ah" d="M259,94 l-8,-4 v8 z"/>
+
+          <text class="elab" x="497"  y="190" text-anchor="middle">× bag→order</text>
+          <line class="ln" x1="483" y1="94" x2="507" y2="94"/>
+          <path class="ah" d="M514,94 l-8,-4 v8 z"/>
+
+          <text class="elab" x="752"  y="190" text-anchor="middle">≤30d, same SKU</text>
+          <line class="ln" x1="738" y1="94" x2="762" y2="94"/>
+          <path class="ah" d="M769,94 l-8,-4 v8 z"/>
+
+          <text class="elab" x="1007" y="190" text-anchor="middle">× AOV × 12</text>
+          <line class="ln" x1="993" y1="94" x2="1017" y2="94"/>
+          <path class="ah" d="M1024,94 l-8,-4 v8 z"/>
+
+        </svg>
+      </div>
+      <div class="ob"><b>The guardrail runs the other way.</b> GMV kept after returns per view takes
+        the returns off box 5 before it counts. A tap that becomes a return never completes this
+        chain — it costs the reverse logistics, the resale margin and the shopper's next visit.
+        That is the whole reason the primary metric is not allowed to be read on its own.</div>
+    </div>
+
+    <div class="opanel">
+      <h4><span class="hn">B</span>The arithmetic behind box 5, from slide 4</h4>
+      <p class="t">Reproduced here so the chain above can be checked without leaving the page. Every
+        step is a share of the step above it, so the segment falls out of the same three questions the
+        segmentation on slide 4 asks. The last three rows turn that population into money.</p>
+      <table class="st">
+        <tr><th>Step</th><th style="text-align:right">Rate</th><th style="text-align:right">Population</th><th>What it excludes</th></tr>
+        <tr><td class="k">Myntra monthly active users</td><td class="m">—</td><td class="m">75.0 M</td><td>—</td></tr>
+        <tr><td class="k">Wishlist at least one item in the month</td><td class="m">× 30%</td><td class="m">22.5 M</td><td>Non-savers</td></tr>
+        <tr><td class="k">Return and reach a saved item within 30 days</td><td class="m">× 45%</td><td class="m">10.1 M</td><td>Drop-offs A and B</td></tr>
+        <tr><td class="k">Leave without adding it to the bag</td><td class="m">× 70%</td><td class="m">7.1 M</td><td>Those who already convert</td></tr>
+        <tr><td class="k">Still intend to buy it</td><td class="m">× 80%</td><td class="m">5.7 M</td><td>Collectors, Lapsed Intenders</td></tr>
+        <tr><td class="k">Not waiting on a future event</td><td class="m">× 70%</td><td class="m">4.0 M</td><td>Committed and Hesitant Waiters</td></tr>
+        <tr class="hi"><td class="k">Have not yet decided which item to buy</td><td class="m">× 70%</td><td class="m">2.8 M</td><td>Ready Buyers — what remains is <b>Undecided Buyers</b></td></tr>
+        <tr><td class="k">If we convert 10 in every 100</td><td class="m">× 10%</td><td class="m">280,000</td><td>new orders a month</td></tr>
+        <tr><td class="k">At an average order value of ₹1,500</td><td class="m">× ₹1,500</td><td class="m">₹42 Cr</td><td>additional GMV per month</td></tr>
+        <tr class="tot"><td>Across the first full year</td><td class="m">× 12</td><td class="m">₹504 Cr</td><td>the figure on slide 4</td></tr>
+      </table>
+      <div class="ob warn"><b>10 in 100 is slide 4's sizing assumption, not a target this slide is
+        committing to.</b> It exists to price the opportunity, which is what a business case needs.
+        What the experiment will actually deliver is unknown until Phase 0 sets the baseline and the
+        power calculation sets the detectable effect. Anyone quoting ₹504 Cr as a forecast is quoting
+        it wrong.</div>
+    </div>
+
+    <div class="opanel">
+      <h4><span class="hn">C</span>The sixteen metrics</h4>
+      <p class="t">Six of these are on the slide; the other ten are here. Nothing was dropped
+        because it was wrong — the slide holds six because six is what fits at a type size a
+        mentor can read across a room. <span class="chip">Appendix only</span> marks the ten.</p>
+
+      <div class="band">Tier 0 · Business metric<em>the goal slide 3 set — this is what all of it is for</em></div>
+      <table class="mt">
+        <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"></colgroup>
+        <thead><tr><th>Metric</th><th>Definition &amp; formula</th><th>Instrumentation source</th><th>Cadence</th><th>Why this one</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="n">Wishlist → purchase, 30 days</td>
+            <td>Share of savers who buy a saved item within 30 days of saving it.
+              <span class="fm">WPC₃₀ = savers who buy a saved item ≤30d ÷ savers in the cohort</span></td>
+            <td><code>wishlist_add</code> joined to <code>order_line</code> on user × sku, 30-day window opening at the save.</td>
+            <td class="cad">Monthly, trailing 30d cohort</td>
+            <td>Slide 3's goal, verbatim. Every other metric on this page exists to explain a move in this one — or to explain why it did not move.</td>
+          </tr>
+          <tr>
+            <td class="n">Incremental GMV<span class="chip a">Appendix only</span></td>
+            <td>The rupee value of the <b>lift</b>, not the level — what a change in add-to-bag is worth once it passes through the rest of the funnel.
+              <span class="fm">ΔGMV = ΔATB × saved-item viewers × bag→order × AOV</span></td>
+            <td>ΔATB from the experiment read; viewers from <code>wishlist_item_view</code>; bag→order and AOV from the standard funnel dashboard.</td>
+            <td class="cad">Per experiment read, then monthly</td>
+            <td>The translation layer between the product metric and slide 4's ₹504 Cr. Without it a lift in ATB is a percentage nobody can price. It survives on the slide as line 2 of the business-metric formula.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="band pri">Tier 1 · Product outcome<em>the one step Fabric Match is actually on</em></div>
+      <table class="mt">
+        <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"></colgroup>
+        <tbody>
+          <tr>
+            <td class="n">Saved item → Add to Bag/Buy-Now<span class="chip p">Primary</span></td>
+            <td>Share of saved-item views that end in a bag or Buy Now in the same visit.
+              <span class="fm">ATB = saved-item views → bag/buy-now ÷ saved-item views<span>read as exposed − holdout</span></span></td>
+            <td><code>wishlist_item_view</code>, and <code>pdp_view</code> carrying a saved-item referrer, joined to <code>atb_click</code> or <code>buy_now</code> on user × sku within the same session.</td>
+            <td class="cad">Daily for health; decision read at the pre-registered n</td>
+            <td>Drop-off C — 745 of 935 records, 80% of the talk. It is also the only step in slide 3's five-step journey the widget sits on: steps 1, 2 and 5 are out of its reach, so claiming them would be dishonest.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="band">Tier 2 · Feature success<em>move in days — they say whether it worked, or merely ran</em></div>
+      <table class="mt">
+        <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"></colgroup>
+        <tbody>
+          <tr>
+            <td class="n">Comparison shown rate</td>
+            <td>Share of eligible saved-item views where a comparison actually rendered.
+              <span class="fm">comparisons rendered ÷ eligible saved-item views</span></td>
+            <td>Widget render event over the eligibility flag — the SKU has a property vector <b>and</b> the shopper has at least one kept item.</td>
+            <td class="cad">Daily, split by category and user tenure</td>
+            <td>The exposure denominator. Nothing downstream can move while this is low, and a flat ATB against a low shown rate is not evidence against the idea — it is evidence the idea never reached anyone.</td>
+          </tr>
+          <tr>
+            <td class="n">Time to decide on a saved item</td>
+            <td>Median elapsed time from the first view of a saved item to bagging or deleting it.
+              <span class="fm">median minutes, first saved-item view → decision</span></td>
+            <td>First <code>wishlist_item_view</code> timestamp to the earlier of <code>atb_click</code> or <code>wishlist_remove</code>.</td>
+            <td class="cad">Weekly, exposed vs holdout</td>
+            <td>Slide 6 measured the status quo at a median 40 minutes and 3.1 attempts, with only 25% getting an answer at all. This is that same number, measured after the fact.</td>
+          </tr>
+          <tr>
+            <td class="n">Visits to a decision<span class="chip a">Appendix only</span></td>
+            <td>Median distinct sessions in which a shopper opens a saved item before it resolves.
+              <span class="fm">median distinct sessions, first view → decision</span></td>
+            <td>Session ids on <code>wishlist_item_view</code> up to the resolving event.</td>
+            <td class="cad">Weekly</td>
+            <td>Overlaps time to decision, which is why it came off the slide — but it is the honest read when the delay is calendar time rather than effort. Slide 6's 3.1 attempts is this metric, not the minutes one.</td>
+          </tr>
+          <tr>
+            <td class="n">Return visits before deciding<span class="chip a">Appendix only</span></td>
+            <td>Mean reopens of the same saved item before it resolves.
+              <span class="fm">views of the item ÷ items resolved, over the cohort</span></td>
+            <td>The same event as above, counted rather than sessionised.</td>
+            <td class="cad">Weekly</td>
+            <td>Separates "came back once and bought" from "came back five times and bought". A decision that closes in a single visit is the exact mechanism slide 8 claims, so this is where that claim is falsifiable.</td>
+          </tr>
+          <tr>
+            <td class="n">Evidence expand rate<span class="chip a">Appendix only</span></td>
+            <td>Share of rendered comparisons where the shopper opens the sources underneath.
+              <span class="fm">taps on “Why this feel?” ÷ comparisons rendered</span></td>
+            <td>Expander tap event over widget render, split by verdict polarity.</td>
+            <td class="cad">Weekly</td>
+            <td>The trust read. A verdict nobody checks is either completely trusted or completely ignored, and which one it is shows up when you put this next to ATB. It is also the earliest place a credibility problem appears — well before it reaches the return rate.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="band gd">Tier 3 · Guardrails<em>these must not move — and one of them is allowed to move only in one direction</em></div>
+      <table class="mt">
+        <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"></colgroup>
+        <tbody>
+          <tr>
+            <td class="n">Returns citing quality</td>
+            <td>Orders returned citing quality or “not as described”, as a share of orders.
+              <span class="fm">quality-reason returns ÷ orders<span>exposed vs holdout</span></span></td>
+            <td>Return reason codes on <code>order_line</code>, restricted to the quality / not-as-described set.</td>
+            <td class="cad">Monthly — the return window sets the lag</td>
+            <td>Converting more while returning more is fake GMV. This is the metric that decides whether a lift was real, and it is the one a mentor should ask about first.</td>
+          </tr>
+          <tr>
+            <td class="n">Claim accuracy vs lab test</td>
+            <td>Share of audited comparisons whose stated properties match an independent lab measurement of the garment.
+              <span class="fm">comparisons matching a lab measurement ÷ comparisons audited</span></td>
+            <td>SKUs spot-bought from live inventory and measured for weight, stretch, drape and thickness; compared against the model's vector for that SKU.</td>
+            <td class="cad">Per category, per model version</td>
+            <td>A return rate cannot separate a wrong claim from a wrong choice — both look identical downstream. Only a direct audit can, which makes this the metric the guardrail above depends on to be attributable at all.</td>
+          </tr>
+          <tr>
+            <td class="n">GMV kept after returns, per view<span class="chip a">Appendix only</span></td>
+            <td>Order value less returned value, per saved-item view.
+              <span class="fm">(orders × AOV − returned value) ÷ saved-item views</span></td>
+            <td><code>order_line</code> net of returns, over the same view denominator as ATB so the two are directly comparable.</td>
+            <td class="cad">Monthly, exposed vs holdout</td>
+            <td>The feature is designed to lose some sales. This is the single number that says whether losing them was worth it: a fall in add-to-bag is acceptable if and only if this holds. It is the metric that makes card 03's argument checkable rather than rhetorical.</td>
+          </tr>
+          <tr>
+            <td class="n">Negative-verdict add-to-bag<span class="chip a">Appendix only</span></td>
+            <td>Share of views carrying an unfavourable comparison that still end in an add-to-bag — paired with the return rate of exactly those orders.
+              <span class="fm">add-to-bags ÷ views with an unfavourable verdict</span></td>
+            <td>Widget render event tagged with verdict polarity, joined to <code>atb_click</code>, then to returns on those order lines.</td>
+            <td class="cad">Weekly, always as the pair</td>
+            <td><b>The deterrence question made measurable.</b> If warned shoppers buy anyway and return at the baseline rate, the warning was noise. If they buy less and the ones who do buy return far less, the deterred sales were returns we did not pay for. Card 03's entire argument reduces to this one pair of numbers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="band">Tier 4 · Operational guardrails<em>never on the slide — they gate the rollout, not the idea</em></div>
+      <table class="mt">
+        <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"></colgroup>
+        <tbody>
+          <tr>
+            <td class="n">Abstention rate<span class="chip a">Appendix only</span></td>
+            <td>Share of eligible views where the model declines — “Can't tell from this listing”.
+              <span class="fm">abstentions ÷ eligible saved-item views</span></td>
+            <td>Widget render event carrying the abstain state.</td>
+            <td class="cad">Daily</td>
+            <td><b>The only metric here that needs a ceiling and a floor.</b> Too high and the feature is absent while appearing to be present. Too low and the confidence floor is not doing its job — abstention is what keeps claim accuracy honest, so a rate near zero is a failure of the guardrail, not a triumph of the model.</td>
+          </tr>
+          <tr>
+            <td class="n">PDP latency<span class="chip a">Appendix only</span></td>
+            <td>Added time-to-interactive on the product page attributable to the widget.
+              <span class="fm">p95 PDP TTI, exposed − holdout<span>against the sub-2s page budget</span></span></td>
+            <td>Real-user monitoring on the PDP, split by arm.</td>
+            <td class="cad">Daily, alerting</td>
+            <td>The comparison is personalised, so it cannot be fully precomputed per SKU. The garment vector is computed at ingest and cached; only the diff against the shopper's reference is computed at request. If that still misses the budget the widget degrades to absent — a slower page loses more than the comparison wins.</td>
+          </tr>
+          <tr>
+            <td class="n">Coverage<span class="chip a">Appendix only</span></td>
+            <td>Share of the catalogue with a usable property vector, <b>weighted by saved-item volume</b> rather than by SKU count.
+              <span class="fm">saved-item views of covered SKUs ÷ all saved-item views</span></td>
+            <td>Property-vector table joined to save volume by SKU.</td>
+            <td class="cad">Weekly, per category</td>
+            <td>An unweighted coverage number flatters. 30% of SKUs might be 80% of saves, or 5% — you cannot tell without the weighting. The weighted number is what actually sets the shown rate, which makes it the Phase 2 gate.</td>
+          </tr>
+          <tr>
+            <td class="n">Cost per profile<span class="chip a">Appendix only</span></td>
+            <td>Marginal inference and storage cost of producing and refreshing one garment property vector.
+              <span class="fm">total inference + storage cost ÷ SKUs profiled</span></td>
+            <td>ML platform billing attributed to the profiling job.</td>
+            <td class="cad">Monthly</td>
+            <td>The catalogue churns, so this is a recurring cost and not a one-off. It sets the ceiling on how far coverage can go, which makes it a constraint on the Phase 2 gate rather than a metric to optimise on its own.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================= RISKS ============================= -->
+  <div class="pane" id="risks">
+    <div class="opanel">
+      <h4><span class="hn">A</span>The register</h4>
+      <p class="t">The three on the slide, plus the six it had no room for. The column that matters
+        is <b>early signal</b> — a risk with no metric attached to it is a worry, not a risk. Every
+        row here names the number that trips first, and every one of those numbers is in the metric
+        tree.</p>
+      <table class="st">
+        <colgroup><col style="width:17%"><col style="width:23%"><col style="width:17%"><col style="width:30%"><col style="width:13%"></colgroup>
+        <thead><tr><th>Risk</th><th>Mechanism</th><th>Early signal</th><th>Mitigation</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr class="hi">
+            <td class="k">The comparison is wrong<span class="chip">On the slide</span></td>
+            <td>The model misreads a fabric and states it confidently. A confident wrong answer is worse than no answer, because it converts a shopper who then returns.</td>
+            <td><b>Claim accuracy vs lab test</b>, then the returns-citing-quality rate a month later.</td>
+            <td>Abstain below a confidence floor — “Can't tell from this listing” — and audit against lab ground truth per category, per model version. The floor is set by the Phase 0 audit, not chosen.</td>
+            <td>ML (size-and-fit team)</td>
+          </tr>
+          <tr class="hi">
+            <td class="k">No garment to compare against<span class="chip">On the slide</span></td>
+            <td>The reference frame is the shopper's own kept purchases. A new shopper has none, and the feature is silent exactly where a first impression is being formed.</td>
+            <td><b>Comparison shown rate</b>, split by user tenure.</td>
+            <td>Named public anchors for shoppers with no closet, a shopper-chosen reference garment, and a minimum kept-purchase gate below which the widget does not claim to know them.</td>
+            <td>ML + PDP widget team</td>
+          </tr>
+          <tr class="hi">
+            <td class="k">Coverage never reaches what people save<span class="chip">On the slide</span></td>
+            <td>Catalogues churn faster than they can be profiled, so the widget is missing on precisely the new arrivals that get saved most.</td>
+            <td><b>Coverage</b>, weighted by saved-item volume — and shown rate by category.</td>
+            <td>Private label and most-saved SKUs first, backfilled through the existing photoshoot pipeline; seller-portal clip upload from Phase 2; a coverage floor per category before the widget turns on there.</td>
+            <td>Catalogue &amp; studio ops</td>
+          </tr>
+          <tr>
+            <td class="k">The doubt clears, the decision doesn't<span class="chip a">Appendix only</span></td>
+            <td>Fabric is one of six doubts on slide 3, at 23.7% of the talk. Clearing it may simply expose the next one, and the item stays saved.</td>
+            <td><b>Evidence expand rate high while ATB stays flat</b> — engagement without resolution.</td>
+            <td>The A/B is the test, and no amount of argument substitutes for it. Kill criteria fixed before launch, and the holdout held long enough to read WPC₃₀ rather than only the leading indicators.</td>
+            <td>PM</td>
+          </tr>
+          <tr>
+            <td class="k">Seller and legal exposure on a comparative claim<span class="chip a">Appendix only</span></td>
+            <td>A comparison is a public statement about one seller's garment measured against another. A wrong or unflattering one invites a seller escalation, and in the worst case a consumer-law or advertising-standards challenge.</td>
+            <td><b>Seller escalations per 1,000 comparisons</b>; claim accuracy broken out by seller.</td>
+            <td>Language is relative and never grades quality — what a fabric is designed to do, not whether it is good. Every claim is traceable to the clip and spec pack that produced it, and provenance is retained. Abstain rather than assert. Legal signs off the sentence templates, not each sentence.</td>
+            <td>Legal + PM</td>
+          </tr>
+          <tr>
+            <td class="k">Sellers game the studio clip<span class="chip a">Appendix only</span></td>
+            <td>The 5-second clip is the primary input and the seller controls it. A heavier sample, a steamed drape, or a different lot from the one that ships all move the vector.</td>
+            <td><b>Divergence between clip-derived properties and spec-pack values</b>; claim accuracy and quality returns by seller.</td>
+            <td>Spot-buy audits drawn from live inventory rather than from samples, a sample-versus-shipped check, and a seller-level accuracy score that gates eligibility. A seller who fails it loses the widget, which is the incentive doing the work.</td>
+            <td>Catalogue ops + Trust</td>
+          </tr>
+          <tr>
+            <td class="k">The page gets slower<span class="chip a">Appendix only</span></td>
+            <td>The comparison is per-shopper, so it cannot be fully precomputed. Profile fan-out at request time is what threatens the PDP budget.</td>
+            <td><b>p95 PDP time-to-interactive</b>, exposed − holdout, against the sub-2s budget.</td>
+            <td>Compute the SKU property vector at ingest and cache it; compute only the diff at request. Degrade to no widget rather than delay the page — the widget is an enhancement and must fail as one.</td>
+            <td>PDP widget team</td>
+          </tr>
+          <tr>
+            <td class="k">The experiment read is contaminated<span class="chip a">Appendix only</span></td>
+            <td>Exposed/holdout assignment leaks — a shopper switches device, or a cache serves the wrong arm — and the difference being measured is not the difference that was designed.</td>
+            <td><b>Sample-ratio mismatch</b> between arms, checked before any read is trusted.</td>
+            <td>Server-side assignment keyed to user id, never to device or session. An SRM check gates every read; a failed check invalidates the read rather than being noted alongside it.</td>
+            <td>Data / experimentation</td>
+          </tr>
+          <tr>
+            <td class="k">The reference set decays<span class="chip a">Appendix only</span></td>
+            <td>The closet is items bought and kept, with returns excluded. But a garment kept two years ago is not the garment the shopper remembers, and washing changes it.</td>
+            <td><b>Evidence expand rate rising on old references</b>; negative-verdict add-to-bag drifting.</td>
+            <td>Weight the reference set toward recent kept items, prefer garments the shopper has re-purchased or reviewed, and let the shopper override the choice of reference. Never anchor to an item older than the category's plausible wear life.</td>
+            <td>ML (size-and-fit team)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="ob warn"><b>What is deliberately not here: numbers.</b> Every mitigation above names
+        a mechanism and the metric that watches it, and none names a threshold. The thresholds come
+        out of Phase 0 — the pre-launch audit sets the claim-accuracy floor, and the power calculation
+        sets the detectable effect and the holdout duration. Inventing them now would be the one thing
+        on this page a mentor could correctly call made up.</div>
+    </div>
+  </div>
+
+  <!-- ============================= GTM ============================= -->
+  <div class="pane" id="gtm">
+
+    <div class="opanel">
+      <h4><span class="hn">A</span>Four phases, and what has to be true to leave each one</h4>
+      <p class="t">The order is not arbitrary. It runs from <b>where we can check ourselves</b> to
+        <b>where we cannot</b> — private label first because Myntra owns the studio, the spec pack and
+        the returns data, so claim accuracy is measurable end to end and no seller is exposed while
+        the model is still unproven. Marketplace SKUs only after the model has earned it.</p>
+      <table class="st">
+        <colgroup><col style="width:15%"><col style="width:29%"><col style="width:28%"><col style="width:28%"></colgroup>
+        <thead><tr><th>Phase</th><th>What ships</th><th>Why in this order</th><th>Exit gate</th></tr></thead>
+        <tbody>
+          <tr class="hi">
+            <td class="k">Phase 0<br><span class="cad">Instrument</span></td>
+            <td>No shopper-facing change. Events, the holdout definition, the exposed/holdout assignment service, and a lab audit of a sampled slice of the catalogue.</td>
+            <td><b>This is the honest reason the slide carries no targets.</b> ATB, WPC₃₀, quality-return rate and time to decision have no clean saved-item baseline today. You cannot set a target against a number you have not measured.</td>
+            <td>Baselines exist for all four. The audit yields a claim-accuracy reading per category. The power calculation sets n and the holdout duration.</td>
+          </tr>
+          <tr>
+            <td class="k">Phase 1<br><span class="cad">One category</span></td>
+            <td>Fabric Match on the PDP, private label only, one category. The full widget: verdict, sources under “Why this feel?”, and the abstain state.</td>
+            <td>Myntra controls the clip, the spec pack and the returns data, so a wrong claim is traceable to its cause within days rather than through a seller. One category keeps the lab audit affordable and the vocabulary consistent.</td>
+            <td>Measured claim accuracy holds at the floor Phase 0 set. Returns citing quality do not rise in exposed. GMV kept after returns per view is not down.</td>
+          </tr>
+          <tr>
+            <td class="k">Phase 2<br><span class="cad">Marketplace</span></td>
+            <td>Top marketplace SKUs by saved-item volume. Seller-portal clip upload, seller accuracy score, and a per-category coverage floor before the widget turns on there.</td>
+            <td>Volume-weighted, so the shown rate moves as fast as it can for the effort spent. Sellers enter only once the accuracy score and the spot-buy audit exist to police them — the incentive has to be live before the surface is.</td>
+            <td>Coverage clears the per-category floor. Seller-level claim accuracy holds. Escalations per 1,000 comparisons stay flat.</td>
+          </tr>
+          <tr>
+            <td class="k">Phase 3<br><span class="cad">Beyond the PDP</span></td>
+            <td>The comparison on the wishlist card itself, then the listing page and search.</td>
+            <td>Last, because it is the highest-exposure surface and the lowest-context one. On the wishlist card the shopper has not asked the question yet, so a wrong claim there costs more and earns less.</td>
+            <td>Everything above still holds at marketplace scale, and PDP latency has stayed inside budget across two quarters of catalogue churn.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="opanel">
+      <h4><span class="hn">B</span>Who does what</h4>
+      <p class="t">Nothing here is a new team. The proposal is deliberately sized to existing rails —
+        slide 8's claim is that <b>60–70% of what Fabric Match needs already exists under size-and-fit</b>,
+        and this table is that claim made specific.</p>
+      <table class="st">
+        <colgroup><col style="width:20%"><col style="width:44%"><col style="width:36%"></colgroup>
+        <thead><tr><th>Team</th><th>What they own</th><th>How much of it is new</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="k">Catalogue &amp; studio ops</td>
+            <td>The 5-second clip — drop, stretch, scrunch — becomes a standard step in the shoot that already happens for every SKU. Spec-pack ingestion from sellers.</td>
+            <td>A protocol change, not a new pipeline. The photoshoot exists; this adds seconds to it.</td>
+          </tr>
+          <tr>
+            <td class="k">ML — size-and-fit team</td>
+            <td>The property model, the comparison layer, the confidence floor and the abstain decision. Reference-set construction from kept purchases.</td>
+            <td>The largest new piece, but it lands on the team that already runs a per-user garment model and its serving path.</td>
+          </tr>
+          <tr>
+            <td class="k">PDP widget team</td>
+            <td>One widget in an existing server-driven component list, plus the evidence expander. The degrade-to-absent path.</td>
+            <td>Genuinely one widget. The PDP already renders a server-driven list; this is an entry in it.</td>
+          </tr>
+          <tr>
+            <td class="k">Seller ops &amp; Trust</td>
+            <td>Clip upload in the seller portal, the seller accuracy score, spot-buy audits and the eligibility gate.</td>
+            <td>New from Phase 2. Deliberately not built before it is needed.</td>
+          </tr>
+          <tr>
+            <td class="k">Legal</td>
+            <td>Review of the sentence templates and the comparative-claim language. Provenance retention policy.</td>
+            <td>One review at Phase 1, then again at Phase 2 when sellers enter. Not per-claim.</td>
+          </tr>
+          <tr>
+            <td class="k">Data / experimentation</td>
+            <td>Assignment, the holdout, the SRM check, and the metric definitions in this appendix.</td>
+            <td>Phase 0 is entirely theirs. After that, standard.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="opanel">
+      <h4><span class="hn">C</span>Communications</h4>
+      <div class="two">
+        <div>
+          <p class="t"><b>Shopper side — no campaign.</b> There is nothing to teach. Fabric Match is a
+            sentence on a page the shopper is already reading, in the moment they are already asking
+            the question. A campaign would be arguing for attention we already have, and it would
+            promise a level of certainty the abstain state exists to avoid promising.</p>
+          <p class="t">The only shopper-facing surfaces are the widget itself and the “Why this feel?”
+            expander underneath it. Both are the product. Neither is marketing.</p>
+        </div>
+        <div>
+          <p class="t"><b>Seller side — an accuracy incentive, not a compliance ask.</b> The message is
+            merchandising, not policy: sellers whose spec packs are accurate and whose clips are clean
+            get comparisons rendered on their listings, and a rendered comparison is conversion they
+            did not pay for.</p>
+          <p class="t">Framing it as a rule invites the minimum viable compliance that risk 6 describes.
+            Framing it as a benefit that can be lost makes the accuracy score do the work.</p>
+        </div>
+      </div>
+      <div class="ob">The strongest thing about the shopper-side story is that <b>it does not need
+        one</b>. Slide 6 measured shoppers spending a median 40 minutes and 3.1 attempts trying to
+        answer this question themselves, and 74% saying one cleared doubt would have converted them
+        that day. Demand for the answer is already established. What was missing was the answer.</div>
+    </div>
+
+    <div class="opanel">
+      <h4><span class="hn">D</span>Decision gates — expand, pause, kill</h4>
+      <p class="t">If the question is <em>“how would you know it failed?”</em>, this is the answer.
+        The readings are structural and they are fixed before launch; the thresholds attached to them
+        come from Phase 0. Note that the second row is the one card 03 is about — <b>a fall in
+        add-to-bag is a passing reading, not a failing one</b>, provided kept GMV holds.</p>
+      <table class="st">
+        <colgroup><col style="width:38%"><col style="width:12%"><col style="width:50%"></colgroup>
+        <thead><tr><th>What we read</th><th>Verdict</th><th>What we do about it</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="k">GMV kept after returns per view up, claim accuracy holding, quality returns flat</td>
+            <td><span class="pill y">Expand</span></td>
+            <td>Next category, then the next surface. The mechanism worked and it did not cost anything to get.</td>
+          </tr>
+          <tr class="hi">
+            <td class="k">Add to Bag <b>down</b>, but GMV kept after returns per view <b>up</b></td>
+            <td><span class="pill y">Expand</span></td>
+            <td>This is the designed outcome, and we say so out loud rather than hiding it. Deterred sales were heading for returns; negative-verdict add-to-bag and the return rate of those orders are the pair that proves it.</td>
+          </tr>
+          <tr>
+            <td class="k">Served rate low, everything downstream unreadable</td>
+            <td><span class="pill">Pause</span></td>
+            <td>A coverage problem, not a product problem. Fix ingestion and re-read. Do not conclude anything about the idea from an experiment that did not reach people.</td>
+          </tr>
+          <tr>
+            <td class="k">Claim accuracy below the floor the Phase 0 audit set</td>
+            <td><span class="pill">Pause</span></td>
+            <td>Raise the confidence floor, retrain, re-audit. Nothing ships while a claim is unreliable — an unreliable comparison damages more than a missing one.</td>
+          </tr>
+          <tr>
+            <td class="k">Returns citing quality up in exposed</td>
+            <td><span class="pill">Pause</span> <span class="pill n">then kill</span></td>
+            <td>Pause and check claim accuracy first — it separates a wrong claim from a wrong choice. If returns survive a claim-accuracy fix, the feature is causing the harm it exists to prevent, and it goes.</td>
+          </tr>
+          <tr>
+            <td class="k">GMV kept after returns flat, with shown rate healthy and claim accuracy good</td>
+            <td><span class="pill n">Kill</span></td>
+            <td><b>The cleanest kill, and the one worth stating plainly.</b> The doubt was cleared, the comparison was right, it reached people — and the decision still did not close. That is risk 4 realised: fabric was not the binding constraint for this cohort. We would rather find that in one category than across the catalogue.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="ob warn"><b>The thresholds are blank on purpose.</b> Ask what number would kill it
+        and the honest answer is that the structure above is fixed now and the numbers are set by the
+        Phase 0 power calculation — before the exposed arm turns on, and pre-registered so they cannot
+        be moved afterwards to fit a result. A kill criterion invented today, against a baseline that
+        has not been measured, would be a number chosen to be survivable.</div>
+    </div>
+  </div>
+
+  <div class="back"><a href="slide-10-success-metrics-slidedoc-v16.html">← back to slide 10</a></div>
+
+</div>
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  function show(id){
+    if(!document.getElementById(id)){ id = 'metrics'; }
+    panes.forEach(function(p){
+      if(p.id === id){ p.classList.add('on'); } else { p.classList.remove('on'); }
+    });
+    tabs.forEach(function(t){
+      if(t.getAttribute('data-pane') === id){ t.classList.add('on'); } else { t.classList.remove('on'); }
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = t.getAttribute('data-pane');
+      show(id);
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + id); } catch(err) {}
+    });
+  });
+  function fromHash(){ show((window.location.hash || '').replace('#','') || 'metrics'); }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+})();
+</script>
+</body>
+</html>
