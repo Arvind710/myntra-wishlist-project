@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 8 · Supporting artefact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#DCE2E7;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 22px 60px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:38ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:100ch}
+
+.opanel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 23px;margin:14px 0 12px}
+.opanel h4{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:17px;line-height:1.2;
+  letter-spacing:-.008em;margin-bottom:10px}
+.q{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.09em;color:var(--ink);margin-bottom:10px}
+.q b{color:var(--win);font-weight:600}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:10px;max-width:104ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+
+/* one paper */
+.s{display:grid;grid-template-columns:34px 1fr;gap:16px;padding:15px 0;
+  border-bottom:1px solid #EEF1F4}
+.s:last-child{border-bottom:none;padding-bottom:0}
+.s .n{font-family:'IBM Plex Mono',monospace;font-size:9.6px;font-weight:600;color:#fff;
+  background:var(--win);padding:2px 0;letter-spacing:.07em;text-align:center;
+  height:fit-content}
+.s .ti{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:15px;line-height:1.24;
+  letter-spacing:-.008em;margin-bottom:4px}
+.s .meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);
+  line-height:1.5;margin-bottom:7px}
+.s .sup{font-size:12.8px;color:var(--ink2);line-height:1.48}
+.s .sup b{color:var(--ink);font-weight:600}
+.s .lk{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-top:8px;
+  word-break:break-all}
+.s .lk a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+.s .lk a:hover{border-bottom-color:var(--win)}
+
+.band{border-left:3px solid var(--win);background:#F5F8FA;padding:10px 13px;
+  font-size:12.8px;color:var(--ink);margin-top:12px}
+.band b{font-weight:600}
+.band.warn{border-left-color:var(--leak);background:#FDF6F1}
+
+.foot{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);
+  margin-top:16px;letter-spacing:.04em}
+@media print{body{background:#fff}.wrap{padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>SUPPORTING ARTEFACT</b> · LINKED FROM SLIDE 8 · THE ENGINE</div>
+    <h1>The research the engine rests on.</h1>
+    <p class="sub">Fabric Match assumes two things: that a machine can read a fabric's physical properties from a video and a spec sheet, and that telling a shopper what those properties <em>feel</em> like — against something they already own — changes the decision. These are the papers behind both halves.</p>
+  </header>
+
+  <div class="opanel">
+    <div class="q"><b>01</b> · Can a model actually read fabric?</div>
+    <div class="s">
+      <span class="n">01</span>
+      <div>
+        <div class="ti">A Systematic Review of AI-Driven Prediction of Fabric Properties and Handfeel</div>
+        <div class="meta">Tu, Kwan, Yick et al. · <i>Materials</i> (Basel) · 2024</div>
+        <div class="sup">A review of the AI methods used to predict fabric characteristics, covering how the models work, what data they are trained on and how accurate they are. <b>This is the premise under the Engine step</b> — that weight, drape and stretch are machine-predictable properties rather than things only a hand can judge, and that the accuracy of that prediction is already a measured quantity in the literature.</div>
+        <div class="lk"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11509711/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov/articles/PMC11509711/</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="opanel">
+    <div class="q"><b>02</b> · Does the shopper actually have this problem?</div>
+    <div class="s">
+      <span class="n">02</span>
+      <div>
+        <div class="ti">Need for touch and haptic imagery: An investigation in online fashion shopping</div>
+        <div class="meta"><i>Journal of Retailing and Consumer Services</i> · 2021</div>
+        <div class="sup">Shoppers hold back from buying a garment online because the sensory experience is missing, and the paper looks for cues that can stand in for touch. <b>This is the case for a reference frame</b> — the gap is not a shortage of specifications, it is the absence of something to feel, and a described comparison against a garment already owned is exactly the compensatory cue this literature is asking for.</div>
+        <div class="lk"><a href="https://www.sciencedirect.com/science/article/abs/pii/S0969698920313862" target="_blank" rel="noopener">sciencedirect.com/science/article/abs/pii/S0969698920313862</a></div>
+      </div>
+    </div>
+    <div class="s">
+      <span class="n">03</span>
+      <div>
+        <div class="ti">Increasing fabric perception accuracy of consumers in online fashion retailing</div>
+        <div class="meta"><i>International Journal of Retail &amp; Distribution Management</i> · 2025</div>
+        <div class="sup">How accurately shoppers perceive fabric from an online listing, and what raises that accuracy. <b>This is the outcome Fabric Match is aiming at</b>: not more information on the page, but a closer match between what the shopper expects the fabric to be and what arrives in the parcel.</div>
+        <div class="lk"><a href="https://www.sciencedirect.com/org/science/article/pii/S0959055225000245" target="_blank" rel="noopener">sciencedirect.com/org/science/article/pii/S0959055225000245</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band warn"><b>What these papers do not establish.</b> None of them tests Fabric Match. They establish that the properties are predictable and that the perception gap is real and movable — the specific claim that a one-sentence comparison against a kept garment closes the decision is this project's own, and is what the user research on slide 5 is for.</div>
+
+  <div class="foot">SLIDE 8 · FABRIC MATCH · SOLUTION RATIONALE</div>
+
+</div>
+</body>
+</html>
