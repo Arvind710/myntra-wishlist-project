@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 2 · Supporting artefact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#DCE2E7;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:40px 22px 60px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:38ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:106ch}
+
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin:0 0 14px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 18px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}
+.pane.on{display:block}
+
+.opanel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 23px;margin-bottom:12px}
+.opanel:last-child{margin-bottom:0}
+.opanel h4{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:17px;line-height:1.2;
+  letter-spacing:-.008em;margin-bottom:10px}
+.q{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.09em;color:var(--ink);margin-bottom:10px}
+.q b{color:var(--win);font-weight:600}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:10px;max-width:112ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+p.t em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--win)}
+
+/* step detail */
+.sd{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:13px 0;
+  border-bottom:1px solid #EEF1F4}
+.sd:last-child{border-bottom:none}
+.sd .lh{}
+.sd .sn{font-family:'IBM Plex Mono',monospace;font-size:9.6px;font-weight:600;color:#fff;
+  background:var(--win);padding:1px 6px;letter-spacing:.07em;display:inline-block;margin-bottom:5px}
+.sd .nm{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:15px;letter-spacing:-.008em}
+.sd .body{font-size:12.8px;color:var(--ink2);line-height:1.45}
+.sd .body b{color:var(--ink);font-weight:600}
+.sd .mth{margin-top:8px;border-left:2px solid var(--track);padding-left:11px;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);line-height:1.6}
+.sd .mth i{font-style:normal;color:var(--ink2)}
+
+/* checks */
+.ops{display:flex;flex-direction:column;gap:12px}
+.op{display:flex;gap:14px;align-items:flex-start}
+.op .on{flex:0 0 auto;min-width:72px;text-align:right;
+  font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;
+  color:var(--win);line-height:1.2;letter-spacing:-.01em}
+.op .ot{font-size:12.9px;line-height:1.45;color:var(--ink2)}
+.op .ot b{font-weight:600;color:var(--ink)}
+
+table.t{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:11px}
+table.t th{font-family:'IBM Plex Mono',monospace;font-size:10.2px;font-weight:600;
+  letter-spacing:.05em;color:var(--faint);text-align:right;padding:0 0 6px 14px;
+  border-bottom:1px solid var(--rule);white-space:nowrap}
+table.t th:first-child{text-align:left;padding-left:0;width:99%}
+table.t td{padding:7px 0 7px 14px;border-bottom:1px solid #EEF1F4;text-align:right;vertical-align:top}
+table.t td:first-child{text-align:left;padding-left:0}
+table.t tr:last-child td{border-bottom:none}
+table.t td.n{font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap}
+table.t td.n.up{color:var(--win)}table.t td.n.dn{color:var(--leak)}table.t td.n.fl{color:var(--dead)}
+table.t tr.top td{background:#F5F8FA}
+table.t tr.top td:first-child{box-shadow:inset 3px 0 0 var(--win);padding-left:9px}
+
+.band{border-left:3px solid var(--win);background:#F5F8FA;padding:10px 13px;
+  font-size:12.8px;color:var(--ink);margin-bottom:11px}
+.band.warn{border-left-color:var(--leak);background:#FDF6F1}
+.band .num{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--win)}
+.band.warn .num{color:var(--leak)}
+.band:last-child{margin-bottom:0}
+
+.lnkout{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-top:14px}
+.lnkout a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+@media print{body{background:#fff}.wrap{padding:0}.pane{display:block!important}.tabs{display:none}}
+
+/* architecture diagram, moved here from the slide */
+.dgwrap{overflow-x:auto}
+svg.dg{display:block;width:100%;min-width:1180px;height:auto}
+svg.dg .lane{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.13em;fill:var(--faint)}
+svg.dg .bx{fill:#FAFBFC;stroke:var(--rule);stroke-width:1}
+svg.dg .bx.src{fill:#F3F5F7;stroke:var(--track)}
+svg.dg .bx.store{fill:#F1F4F6;stroke:var(--track)}
+svg.dg .bx.app{fill:#EDF5FA;stroke:#BCD9EC}
+svg.dg .accent{fill:var(--win)}
+svg.dg .accent-d{fill:var(--dead)}
+svg.dg .bt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.07em;fill:var(--ink)}
+svg.dg .bt.w{fill:var(--win)}
+svg.dg .bd{font-family:'IBM Plex Sans',sans-serif;font-size:11.2px;fill:var(--ink2)}
+svg.dg .bd b,svg.dg .bd .k{font-weight:600;fill:var(--ink)}
+svg.dg .mono{font-family:'IBM Plex Mono',monospace;font-size:10.2px;fill:var(--faint)}
+svg.dg .ln{stroke:var(--track);stroke-width:1.4;fill:none}
+svg.dg .ln.w{stroke:var(--win)}
+svg.dg .elab{font-family:'IBM Plex Mono',monospace;font-size:9.4px;
+  letter-spacing:.06em;fill:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>SUPPORTING ARTEFACT</b> · LINKED FROM SLIDE 2</div>
+    <h1>The working behind the discovery engine.</h1>
+    <p class="sub">What each of the six steps actually does, what stops the engine fooling itself, and what it cannot tell you — all kept off the slide so it stays readable.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="method" type="button">THE METHOD IN DETAIL</button>
+    <button class="tab" data-pane="checks" type="button">CHECKS AND LIMITS</button>
+    <button class="tab" data-pane="architecture" type="button">ARCHITECTURE</button>
+  </div>
+
+  <!-- ==================== TAB 1 ==================== -->
+  <div class="pane on" id="method">
+
+    <div class="opanel">
+      <h4>Six steps, and the technique inside each one.</h4>
+      <p class="t">The slide gives the plain-English version. This is the same sequence with the method named, so an engineer or a data-minded mentor can see what is actually being run and where the judgement calls sit.</p>
+    </div>
+
+    <div class="opanel">
+
+      <div class="sd">
+        <div class="lh"><span class="sn">STEP 1</span><div class="nm">Collect</div></div>
+        <div class="body">
+          Everything public that touches saving items and buying them, from three kinds of source: long comment threads under hauls and reviews, app-store reviews, and Indian fashion and shopping forums. Reddit's own API access was refused, so it was collected through a third-party service.
+          <div class="mth">scrapers + REST on a schedule<br>per-query and per-subreddit yield measured before anything is dropped<br>PII replaced with typed placeholders · Hinglish and Devanagari detected and kept</div>
+        </div>
+      </div>
+
+      <div class="sd">
+        <div class="lh"><span class="sn">STEP 2</span><div class="nm">Filter</div></div>
+        <div class="body">
+          Duplicates removed, then a relevance judgement on every surviving record, one at a time. <b>The rule for keeping a record was written down and committed before collection began</b>, so it cannot be loosened later to rescue a result. Every rejection stores its reason.
+          <div class="mth">exact-hash dedupe<br>MinHash / Jaccard near-duplicate, <i>within one author only</i> — fifty people saying the same thing is the finding, not noise<br>one <i>gpt-5-mini</i> call per record · 12,002 → 1,018</div>
+        </div>
+      </div>
+
+      <div class="sd">
+        <div class="lh"><span class="sn">STEP 3</span><div class="nm">Label</div></div>
+        <div class="body">
+          Two passes over each kept record: first where the shopper stopped, then what stopped them. Every label is pinned to a verbatim quote span in the original text. A second, independent pass groups the same records by meaning without ever seeing the label set — the only view of this material not shaped by the categories, and so the only thing that could catch something nobody thought to look for.
+          <div class="mth">codebook frozen and version-stamped before a record was read<br>classifier: <i>gpt-5</i>, two passes, 2,094 labels applied<br>blind pass: embeddings → UMAP → HDBSCAN, <i>21 clusters</i></div>
+        </div>
+      </div>
+
+      <div class="sd">
+        <div class="lh"><span class="sn">STEP 4</span><div class="nm">Group</div></div>
+        <div class="body">
+          Three questions the labelling has already answered decide which group a shopper falls into: is there still intent to buy, is the purchase waiting on something external, and has the decision been made. No second model call and no guessing at motive — the rules are fixed, so every record lands in exactly one group.
+          <div class="mth">deterministic decision rules, no inference<br>distinctiveness measured as <i>P(reason | group) ÷ P(reason | everyone)</i><br>circular associations identified and excluded from the score</div>
+        </div>
+      </div>
+
+      <div class="sd">
+        <div class="lh"><span class="sn">STEP 5</span><div class="nm">Rank</div></div>
+        <div class="body">
+          Each reason scores 0 to 1 on five questions — how often it comes up, how hard people work around it, whether the shopper's intent survives it, whether it can be fixed without a discount, and how well evidenced it is. The fourth is the project's own constraint, built into the score rather than applied afterwards. Weights are exposed as sliders, not hard-coded, so a reader who disagrees can move them and watch the order change.
+          <div class="mth">components min–max scaled, weighted sum, weights <i>0–2, default 1.00</i><br>Monte Carlo: 1,000 seeded draws at ±30% · leave-one-out<br>co-occurrence lift and PMI above a 30-record floor</div>
+        </div>
+      </div>
+
+      <div class="sd">
+        <div class="lh"><span class="sn">STEP 6</span><div class="nm">Ask</div></div>
+        <div class="body">
+          A retrieval-augmented chatbot over the same tables. The question is embedded with the same model used on the corpus, matched against the record index by cosine similarity, and the hits are joined back to their rows before anything is written. The answer cites the records it stands on, and figures are quoted from the stored tables rather than recalculated. <b>It is scoped to one question</b> — anything outside the corpus is refused rather than guessed at.
+          <div class="mth">embed question → cosine k-NN over 1,018 record embeddings<br>join hits to <i>corpus.db</i> rows → assemble context → <i>gpt-5</i><br>no answer without a retrieved record to stand on</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==================== TAB 2 ==================== -->
+  <div class="pane" id="checks">
+
+    <div class="opanel">
+      <div class="q"><b>01</b> · What stops it fooling itself</div>
+      <h4>Six checks, and they run whether or not they flatter the answer.</h4>
+      <div class="ops">
+        <div class="op">
+          <div class="on">2,094</div>
+          <div class="ot"><b>of 2,094 evidence quotes verified word-for-word</b> against the record they came from. A generated claim whose number does not match its row is rejected outright.</div>
+        </div>
+        <div class="op">
+          <div class="on">21</div>
+          <div class="ot"><b>groups found by a second, blind pass</b> that never sees the codebook. It is the only view of this material not shaped by the categories — so the only thing that can catch a reason nobody thought to list.</div>
+        </div>
+        <div class="op">
+          <div class="on">6.6×</div>
+          <div class="ot"><b>the quiet stopping points get their chance.</b> Each would have to be under-reported 6.6×, 14.5× and 25.0× before it overtook the leader, against 3× as the most hidden silence anyone can argue for. The threshold is drawn on the chart, not described beside it.</div>
+        </div>
+        <div class="op">
+          <div class="on">1,000</div>
+          <div class="ot"><b>re-runs of the ranking with every weight shuffled ±30%.</b> A thousand versions of the reader who disagrees with the weighting — and the order barely moves.</div>
+        </div>
+        <div class="op">
+          <div class="on">30</div>
+          <div class="ot"><b>records is the floor to be ranked at all,</b> however good a score looks. Below 15 it is not shown as a finding.</div>
+        </div>
+        <div class="op">
+          <div class="on">59</div>
+          <div class="ot"><b>records re-labelled by hand, blind to what the machine decided.</b> Agreement is published for every reason — including the two where it fails.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opanel">
+      <div class="q"><b>02</b> · Where the agreement holds, and where it doesn't</div>
+      <h4>κ is agreement with a human coder, after chance is removed.</h4>
+      <p class="t">0 is a coin flip, 1 is perfect, and 0.60 is the usual bar for reliable. A person hand-labelled a blind sample of 59 records without seeing what the classifier decided.</p>
+      <table class="t">
+        <thead><tr><th>Reason</th><th>κ</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>“Which size, when every brand runs different?”</td><td class="n up">0.66</td><td>clears the bar</td></tr>
+          <tr><td>“Is this the right price, and is now the right time?”</td><td class="n up">0.64</td><td>clears the bar</td></tr>
+          <tr><td>“Will it look good on me, with what I already own?”</td><td class="n">0.52</td><td>under the bar</td></tr>
+          <tr class="top"><td><b>“Will the fabric and colour actually look like the photos?”</b></td><td class="n dn">0.43</td><td>under the bar</td></tr>
+          <tr><td>“I need to check with someone before I buy this.”</td><td class="n dn">0.10</td><td>unreliable — a lead, not a finding</td></tr>
+        </tbody>
+      </table>
+      <div class="band warn"><b>The winning reason sits at <span class="num">κ 0.43</span>, under the bar.</b> Its rank survives — it leads on volume, on workaround effort and on surviving intent, none of which depend on that boundary. What does not survive is its edge against neighbouring reasons: where “the fabric looks wrong” ends and “the quality looks cheap” begins is not yet settled. That is the first thing the interviews are built to answer.</div>
+      <div class="band warn"><b>One reason is unreliable outright.</b> On “I need to check with someone first”, the human coder read it as app permissions where the codebook means another person's approval. It is reported at κ 0.10 and treated as a research lead, never as a finding.</div>
+    </div>
+
+    <div class="opanel">
+      <div class="q"><b>03</b> · What it cannot tell you</div>
+      <h4>The limits, stated rather than buried.</h4>
+      <div class="band warn"><b>Every share is a share of conversation, not a drop-off rate.</b> There is no user-level, funnel or revenue data anywhere in this corpus. It measures what gets talked about, weighted by how hard people work around it — which is why the under-reporting test on slide 3 exists at all.</div>
+      <div class="band warn"><b>Forgetting is under-counted by construction.</b> Nobody posts about a wishlist they forgot, and nobody writes a review complaining that a list was hard to scroll. A low count on those steps is not evidence they are small — it is evidence the instrument is deaf to them.</div>
+      <div class="band warn"><b>Two validation thresholds fail, and are reported as failing.</b> Agreement with the human coder clears the bar for 2 of the 5 reasons with enough labels to measure it, and the relevance recall figure is an estimate rather than a measurement. Neither is restated as passing anywhere in the app.</div>
+      <div class="band warn"><b>About a third of the relevant material is Myntra-specific.</b> The rest is Indian online fashion generally, so anything said about Myntra in particular rests on the smaller pool. Google Play and the Apple App Store also share the same review skew, so they are read as one source rather than two.</div>
+      <div class="band"><b>Which is why the engine sets the agenda and people settle it.</b> Every finding here was carried into the survey and the interviews on slide 5 to be tested against shoppers directly.</div>
+    </div>
+
+    <div class="lnkout">LIVE ENGINE · <a href="https://myntra-discovery-engine-p62azqwfs4r93yn2rx7qgx.streamlit.app" target="_blank" rel="noopener">myntra-discovery-engine-p62azqwfs4r93yn2rx7qgx.streamlit.app</a> — every figure above opens the records behind it</div>
+
+  </div>
+
+  <!-- ==================== TAB 3 ==================== -->
+  <div class="pane" id="architecture">
+    <div class="opanel">
+      <h4>How the engine is put together.</h4>
+      <p class="t">The batch pipeline writes once; the app and the chatbot only read. Kept off the slide so the slide stays about the research rather than the plumbing.</p>
+    </div>
+<div class="opanel">
+    <div class="q"><b>03</b> · Architecture</div>
+    <h2>Batch pipeline writes once; the app and the chatbot only read.</h2>
+
+    <div class="dgwrap">
+    <svg class="dg" viewBox="0 0 1360 412" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Architecture: ingest, batch processing, storage and read-only serving">
+      <defs>
+        <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="#C6CFD6"/>
+        </marker>
+        <marker id="ahw" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="#0072B2"/>
+        </marker>
+      </defs>
+
+      <text class="lane" x="8"   y="13">INGEST</text>
+      <text class="lane" x="250" y="13">PROCESSING · BATCH, RUN ONCE PER CORPUS</text>
+      <text class="lane" x="680" y="13">STORAGE</text>
+      <text class="lane" x="950" y="13">SERVING · READ ONLY</text>
+
+      <!-- INGEST -->
+      <rect class="bx src" x="8" y="32" width="212" height="112" rx="2"/>
+      <text class="bt" x="20" y="51">SOURCES</text>
+      <text class="bd" x="20" y="70">YouTube — comment threads</text>
+      <text class="bd" x="20" y="88">App store reviews — Play + Apple</text>
+      <text class="bd" x="20" y="106">Reddit — via third-party API</text>
+      <text class="mono" x="20" y="128">public data only · pseudonymised</text>
+
+      <!-- PROCESSING -->
+      <rect class="bx" x="250" y="32" width="390" height="58" rx="2"/>
+      <text class="bt" x="262" y="51">CLEAN</text>
+      <text class="bd" x="262" y="69">exact-hash + MinHash near-duplicate (Jaccard,</text>
+      <text class="bd" x="262" y="85">within one author) · PII scrub · language detect</text>
+
+      <rect class="bx" x="250" y="104" width="390" height="62" rx="2"/>
+      <text class="bt" x="262" y="123">RELEVANCE GATE</text>
+      <text class="mono" x="393" y="123">gpt-5-mini</text>
+      <text class="bd" x="262" y="141">one call per record, rejection reason stored</text>
+      <text class="mono" x="262" y="159">12,002 → 1,018</text>
+
+      <rect class="bx" x="250" y="180" width="390" height="66" rx="2"/>
+      <text class="bt" x="262" y="199">CLASSIFIER</text>
+      <text class="mono" x="352" y="199">gpt-5 · two passes</text>
+      <text class="bd" x="262" y="217">pass 1 stopping point · pass 2 reason</text>
+      <text class="bd" x="262" y="235">every label pinned to a verbatim quote span</text>
+
+      <rect class="bx" x="250" y="260" width="390" height="62" rx="2"/>
+      <text class="bt" x="262" y="279">EMBED + CLUSTER</text>
+      <text class="mono" x="262" y="297">text-embedding-3-small → UMAP → HDBSCAN</text>
+      <text class="bd" x="262" y="315">blind pass — never sees the label set</text>
+
+      <rect class="bx" x="250" y="336" width="390" height="62" rx="2"/>
+      <text class="bt" x="262" y="355">SCORING</text>
+      <text class="bd" x="262" y="373">5 components, min–max scaled, weighted sum</text>
+      <text class="mono" x="262" y="391">Monte Carlo · 1,000 seeded draws at ±30%</text>
+
+      <path class="ln" d="M220,61 H244" marker-end="url(#ah)"/>
+      <path class="ln" d="M445,90  V98"  marker-end="url(#ah)"/>
+      <path class="ln" d="M445,166 V174" marker-end="url(#ah)"/>
+      <path class="ln" d="M445,246 V254" marker-end="url(#ah)"/>
+      <path class="ln" d="M445,322 V330" marker-end="url(#ah)"/>
+
+      <!-- write bus -->
+      <path class="ln" d="M640,135 H658"/>
+      <path class="ln" d="M640,213 H658"/>
+      <path class="ln" d="M640,367 H658"/>
+      <path class="ln" d="M658,135 V367"/>
+      <path class="ln" d="M658,150 H674" marker-end="url(#ah)"/>
+      <text class="elab" x="664" y="96">WRITES</text>
+
+      <path class="ln" d="M640,291 H666 V286 H674" marker-end="url(#ah)"/>
+
+      <!-- STORAGE -->
+      <rect class="bx store" x="680" y="104" width="230" height="92" rx="2"/>
+      <text class="bt" x="692" y="123">corpus.db</text>
+      <text class="mono" x="770" y="123">SQLite</text>
+      <text class="bd" x="692" y="143"><tspan class="k">records</tspan> · <tspan class="k">labels</tspan> · <tspan class="k">scores</tspan></text>
+      <text class="bd" x="692" y="161"><tspan class="k">segments</tspan> · <tspan class="k">runs</tspan></text>
+      <text class="mono" x="692" y="182">run-stamped · seeded · calls logged</text>
+
+      <rect class="bx store" x="680" y="252" width="230" height="68" rx="2"/>
+      <text class="bt" x="692" y="271">VECTOR INDEX</text>
+      <text class="bd" x="692" y="291">1,018 record embeddings</text>
+      <text class="mono" x="692" y="309">cosine k-NN retrieval</text>
+
+      <path class="ln" d="M910,140 H930 V96 H944" marker-end="url(#ah)"/>
+      <path class="ln w" d="M910,175 H936 V300 H944" marker-end="url(#ahw)"/>
+      <path class="ln w" d="M910,290 H930 V312 H944" marker-end="url(#ahw)"/>
+
+      <!-- SERVING -->
+      <rect class="bx app" x="950" y="32" width="402" height="114" rx="2"/>
+      <text class="bt" x="962" y="51">STREAMLIT APP</text>
+      <text class="bd" x="962" y="71"><tspan class="k">Data Bank</tspan> — every record, readable</text>
+      <text class="bd" x="962" y="89"><tspan class="k">Analysis</tspan> — where shoppers stop</text>
+      <text class="bd" x="962" y="107"><tspan class="k">Insights</tspan> — what stops them</text>
+      <text class="mono" x="962" y="130">SELECT only — nothing computed at page load</text>
+
+      <rect class="bx app" x="950" y="232" width="402" height="150" rx="2"/>
+      <text class="bt w" x="962" y="252">ASK AI</text>
+      <text class="mono" x="1012" y="252">retrieval-augmented generation</text>
+      <text class="bd" x="962" y="274"><tspan class="k">1</tspan> embed the question — same embedding model</text>
+      <text class="bd" x="962" y="292"><tspan class="k">2</tspan> cosine k-NN over the record index</text>
+      <text class="bd" x="962" y="310"><tspan class="k">3</tspan> join the hits back to their rows in corpus.db</text>
+      <text class="bd" x="962" y="328"><tspan class="k">4</tspan> assemble context, answer with gpt-5</text>
+      <text class="bd" x="962" y="346"><tspan class="k">5</tspan> every claim cited to the records behind it</text>
+      <text class="mono" x="962" y="370">off-corpus questions refused · no answer without a record</text>
+    </svg>
+    </div>
+    </div>
+  </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  function show(id){
+    if(!document.getElementById(id)){ id = 'method'; }
+    panes.forEach(function(p){
+      if(p.id === id){ p.classList.add('on'); } else { p.classList.remove('on'); }
+    });
+    tabs.forEach(function(t){
+      if(t.getAttribute('data-pane') === id){ t.classList.add('on'); } else { t.classList.remove('on'); }
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = t.getAttribute('data-pane');
+      show(id);
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + id); } catch(err) {}
+    });
+  });
+  function fromHash(){ show((window.location.hash || '').replace('#','') || 'method'); }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+})();
+</script>
+</body>
+</html>

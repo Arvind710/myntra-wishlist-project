@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 7 appendix — Why Fabric Match?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#DCE2E7;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:40px 22px 60px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:38ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:104ch}
+.sub b{color:var(--ink);font-weight:600}
+
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin:0 0 14px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 18px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}
+.pane.on{display:block}
+
+.opanel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 23px;margin-bottom:12px}
+.opanel:last-child{margin-bottom:0}
+.opanel h4{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:17px;line-height:1.2;
+  letter-spacing:-.008em;margin-bottom:10px}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:10px;max-width:114ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+
+/* comparison table */
+table.cmp{width:100%;border-collapse:collapse;font-size:12.6px}
+table.cmp th{font-family:'IBM Plex Mono',monospace;font-size:9.8px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:left;
+  padding:0 12px 7px;border-bottom:1px solid var(--rule);vertical-align:bottom}
+table.cmp th.q{width:200px;padding-left:0}
+table.cmp td{padding:11px 12px;border-bottom:1px solid #EEF1F4;vertical-align:top;
+  color:var(--ink2);line-height:1.42}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp td.q{color:var(--ink);font-weight:600;padding-left:0}
+table.cmp td.sel{background:#F4F9FC;box-shadow:inset 3px 0 0 var(--win)}
+table.cmp td b{color:var(--ink);font-weight:600}
+
+/* rice */
+table.rice{width:100%;border-collapse:collapse;font-size:12.6px}
+table.rice th{font-family:'IBM Plex Mono',monospace;font-size:9.8px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:right;
+  padding:0 8px 7px;border-bottom:1px solid var(--rule)}
+table.rice th:first-child{text-align:left;padding-left:0}
+table.rice td{padding:10px 8px;border-bottom:1px solid #EEF1F4;text-align:right;
+  font-family:'IBM Plex Mono',monospace;color:var(--ink2)}
+table.rice td:first-child{text-align:left;padding-left:0;font-family:'IBM Plex Sans',sans-serif}
+table.rice tr:last-child td{border-bottom:none}
+table.rice td.sc{color:var(--ink);font-weight:600}
+table.rice tr.hi td{background:#F4F9FC}
+table.rice tr.hi td:first-child{box-shadow:inset 3px 0 0 var(--win);padding-left:9px;font-weight:600;color:var(--ink)}
+
+/* decision criteria */
+.crit{display:grid;gap:8px}
+.cr{display:grid;grid-template-columns:1fr 110px 110px 110px;gap:9px;align-items:center;font-size:12.8px}
+.cr .h{font-family:'IBM Plex Mono',monospace;font-size:9.8px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--faint);font-weight:600;text-align:center}
+.cr .k{color:var(--ink);font-weight:600}
+.pill{text-align:center;font-size:11.8px;padding:5px 0;background:#EDF1F4;color:var(--ink2)}
+.pill.y{background:#DCEBF5;color:var(--win);font-weight:600}
+.pill.n{background:#F5E3D8;color:var(--leak)}
+
+.ob{border-left:3px solid var(--win);background:#F5F8FA;padding:11px 13px;font-size:12.7px;
+  margin-top:13px;color:var(--ink2);line-height:1.45}
+.ob b{color:var(--ink);font-weight:600}
+
+.back{margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+.back a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>Slide 7 appendix</b> · Why Fabric Match?</div>
+    <h1>The working that chose Fabric Match over the other two options.</h1>
+    <p class="sub">Three screens, in the order they were applied: how each option compares against the
+      unmet need, how they score on <b>RICE</b>, and the decision criteria that actually settled it.
+      RICE is the screen; the criteria are the decision.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="comparison" type="button">SOLUTION COMPARISON</button>
+    <button class="tab" data-pane="rice" type="button">RICE SCREEN</button>
+    <button class="tab" data-pane="criteria" type="button">DECISION CRITERIA</button>
+  </div>
+
+  <!-- ============ COMPARISON ============ -->
+  <div class="pane on" id="comparison">
+    <div class="opanel">
+      <h4>Solution comparison</h4>
+      <table class="cmp">
+        <tr>
+          <th class="q"></th>
+          <th>Fabric in Motion</th>
+          <th>Fabric Feedback</th>
+          <th>Fabric Match</th>
+        </tr>
+        <tr>
+          <td class="q">How directly does it solve the unmet need?</td>
+          <td><b>Indirectly.</b> A better guess from the same channel that already failed.</td>
+          <td><b>Partly.</b> Structured beats prose, but a number with no referent is the "180 GSM" problem crowdsourced.</td>
+          <td class="sel"><b>Directly.</b> Supplies the referent — the only construction that turns a fabric fact into a decision.</td>
+        </tr>
+        <tr>
+          <td class="q">How difficult is it to execute?</td>
+          <td><b>Low.</b> A studio protocol change.</td>
+          <td><b>Moderate.</b> A week of engineering; the hard part is getting buyers to fill sliders.</td>
+          <td class="sel"><b>High</b> — but 60–70% of the rails already exist under size-and-fit.</td>
+        </tr>
+        <tr>
+          <td class="q">How unique is it?</td>
+          <td><b>Not unique.</b> Video galleries are standard; several brands already shoot fabric close-ups.</td>
+          <td><b>Fairly.</b> Structured reviews exist; nobody has scoped them to tactile properties.</td>
+          <td class="sel"><b>No fashion marketplace has done it.</b></td>
+        </tr>
+        <tr>
+          <td class="q">Can a competitor copy it?</td>
+          <td><b>Within a quarter.</b> Anyone with a studio.</td>
+          <td><b>Easily.</b> Anyone with reviews.</td>
+          <td class="sel"><b>Structurally hard.</b> The moat isn't the feature — it's what you kept. Ajio cannot see your Myntra wardrobe, and the reference set compounds with every purchase.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ RICE ============ -->
+  <div class="pane" id="rice">
+    <div class="opanel">
+      <h4>RICE screen</h4>
+      <table class="rice">
+        <tr><th>Solution</th><th>R</th><th>I</th><th>C</th><th>E</th><th>Score</th></tr>
+        <tr><td>Fabric in Motion</td><td>8</td><td>4</td><td>4</td><td>5</td><td class="sc">25.6</td></tr>
+        <tr><td>Fabric Feedback</td><td>6</td><td>5</td><td>4</td><td>3</td><td class="sc">40</td></tr>
+        <tr class="hi"><td>Fabric Match</td><td>10</td><td>8</td><td>7</td><td>10</td><td class="sc">56</td></tr>
+      </table>
+      <div class="ob"><b>Fabric Match wins the screen at 56</b> — highest reach and impact, despite
+        carrying the highest effort. But RICE has no term for whether a competitor can ship the same
+        thing next quarter, and that is decisive here. RICE is the screen; the criteria are the decision.</div>
+    </div>
+  </div>
+
+  <!-- ============ CRITERIA ============ -->
+  <div class="pane" id="criteria">
+    <div class="opanel">
+      <h4>Decision criteria</h4>
+      <div class="crit">
+        <div class="cr">
+          <span></span>
+          <span class="h">Motion</span><span class="h">Feedback</span><span class="h">Match</span>
+        </div>
+        <div class="cr">
+          <span class="k">Follows the discovered problem</span>
+          <span class="pill n">No</span><span class="pill">Partly</span><span class="pill y">Yes</span>
+        </div>
+        <div class="cr">
+          <span class="k">Unique</span>
+          <span class="pill n">No</span><span class="pill">Partly</span><span class="pill y">Yes</span>
+        </div>
+        <div class="cr">
+          <span class="k">Defensible against copying</span>
+          <span class="pill n">No</span><span class="pill n">No</span><span class="pill y">Yes</span>
+        </div>
+        <div class="cr">
+          <span class="k">Buildable on existing rails</span>
+          <span class="pill y">Yes</span><span class="pill y">Yes</span><span class="pill y">Yes</span>
+        </div>
+      </div>
+      <div class="ob">Options 1 and 2 aren't wasted. <b>Fabric in Motion supplies the studio video
+        Fabric Match reads.</b> <b>Fabric Feedback supplies the buyer calibration that keeps it
+        honest.</b> They are inputs to the chosen solution, not alternatives to it.</div>
+    </div>
+  </div>
+
+  <div class="back"><a href="slide-7-solution-options-slidedoc-v6.html">← back to slide 7</a></div>
+
+</div>
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  function show(id){
+    if(!document.getElementById(id)){ id = 'comparison'; }
+    panes.forEach(function(p){
+      if(p.id === id){ p.classList.add('on'); } else { p.classList.remove('on'); }
+    });
+    tabs.forEach(function(t){
+      if(t.getAttribute('data-pane') === id){ t.classList.add('on'); } else { t.classList.remove('on'); }
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = t.getAttribute('data-pane');
+      show(id);
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + id); } catch(err) {}
+    });
+  });
+  function fromHash(){ show((window.location.hash || '').replace('#','') || 'comparison'); }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 9 appendix — Fabric Match prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#DBE1E5;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#CBD3D9;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;--ui:#4C35C4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:40px 22px 60px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:46ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:104ch}
+.sub b{color:var(--ink);font-weight:600}
+.sub a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin:0 0 14px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 18px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}
+.pane.on{display:block}
+
+.opanel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 23px;margin-bottom:12px}
+.opanel:last-child{margin-bottom:0}
+.opanel h4{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:17px;line-height:1.2;
+  letter-spacing:-.008em;margin-bottom:10px}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:10px;max-width:114ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+code,.mono{font-family:'IBM Plex Mono',monospace;font-size:12.1px}
+code{background:#EEF2F5;padding:1px 4px;color:var(--ink)}
+.ui{color:var(--ui);font-weight:600}
+
+/* tables */
+table.st{width:100%;border-collapse:collapse;font-size:12.6px;margin-top:4px}
+table.st th{font-family:'IBM Plex Mono',monospace;font-size:9.8px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:left;
+  padding:0 12px 7px;border-bottom:1px solid var(--rule);vertical-align:bottom}
+table.st th:first-child,table.st td:first-child{padding-left:0}
+table.st td{padding:10px 12px;border-bottom:1px solid #EEF1F4;vertical-align:top;
+  color:var(--ink2);line-height:1.42}
+table.st tr:last-child td{border-bottom:none}
+table.st td.k{font-family:'IBM Plex Mono',monospace;font-size:11.6px;color:var(--ink);
+  font-weight:600;white-space:nowrap}
+table.st td b{color:var(--ink);font-weight:600}
+table.st tr.hi td{background:#F4F9FC}
+table.st tr.hi td:first-child{box-shadow:inset 3px 0 0 var(--win);padding-left:9px}
+.shot{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);white-space:nowrap}
+
+/* diagrams */
+.scroll{overflow-x:auto}
+svg.dg{display:block;width:100%;min-width:1120px;height:auto}
+svg.dg .lane{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.09em;fill:var(--faint)}
+svg.dg .bx{fill:#FAFBFC;stroke:var(--rule);stroke-width:1}
+svg.dg .bx.src{fill:#F3F5F7;stroke:var(--track)}
+svg.dg .bx.eng{fill:#EDF5FA;stroke:#BCD9EC}
+svg.dg .bx.out{fill:#F1F4F6;stroke:var(--track)}
+svg.dg .bx.stop{fill:#FBF0E8;stroke:#E7C4A6}
+svg.dg .bt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
+  fill:var(--ink);letter-spacing:.04em}
+svg.dg .bt.w{fill:var(--win)}
+svg.dg .bt.l{fill:var(--leak)}
+svg.dg .bd{font-family:'IBM Plex Sans',sans-serif;font-size:11.2px;fill:var(--ink2)}
+svg.dg .bd b{font-weight:600;fill:var(--ink)}
+svg.dg .mono{font-family:'IBM Plex Mono',monospace;font-size:10px;fill:var(--faint)}
+svg.dg .ln{stroke:var(--track);stroke-width:1.4;fill:none}
+svg.dg .ln.w{stroke:var(--win)}
+svg.dg .ln.l{stroke:var(--leak);stroke-dasharray:4 3}
+svg.dg .elab{font-family:'IBM Plex Mono',monospace;font-size:9.4px;fill:var(--faint)}
+
+.ob{border-left:3px solid var(--win);background:#F5F8FA;padding:11px 13px;font-size:12.7px;
+  margin-top:13px;color:var(--ink2);line-height:1.45}
+.ob b{color:var(--ink);font-weight:600}
+.ob.warn{border-left-color:var(--leak);background:#FBF5F1}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.4px;color:var(--faint)}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;
+  border:1px solid var(--track)}
+.legend .b1{background:#EDF5FA;border-color:#BCD9EC}
+.legend .b2{background:#F3F5F7}
+.legend .b3{background:#FBF0E8;border-color:#E7C4A6}
+
+.back{margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+.back a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>Slide 9 appendix</b> · Fabric Match prototype</div>
+    <h1>What the shopper walks through, and what runs underneath it.</h1>
+    <p class="sub">Two screens: the <b>path a shopper actually takes</b> — including the five ways the
+      product page can answer — and the <b>engine behind it</b>, stage by stage, with an honest mark
+      of what this prototype really computes and what it stands in for. Source:
+      <a href="https://github.com/Arvind710/Myntra-Fabric-feel-mvp">github.com/Arvind710/Myntra-Fabric-feel-mvp</a> ·
+      <a href="https://myntra-fabric-mvp.vercel.app">myntra-fabric-mvp.vercel.app</a></p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="userflow" type="button">USER FLOW</button>
+    <button class="tab" data-pane="architecture" type="button">ARCHITECTURE</button>
+  </div>
+
+  <!-- ==================== USER FLOW ==================== -->
+  <div class="pane on" id="userflow">
+
+    <div class="opanel">
+      <h4>The spine — one line, no branches</h4>
+      <p class="t">This is the whole of what a shopper does. The feature lives at the product page and
+        on the wishlist; everything else is Myntra's own app, rebuilt so the feature has somewhere real
+        to sit. <b>Buy&nbsp;Now is a parallel spine, not a step in this one</b>: product page →
+        <code>Review Order</code> → payment → confirmed, one garment, and the bag is never touched.</p>
+      <div class="scroll">
+      <svg class="dg" viewBox="0 0 1240 300" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Home to product page to size sheet, bag, checkout and a confirmed order, then back to a reordered home; the tier 2 sheet sits above the product page and the wishlist is a second entry to it">
+
+        <text class="lane" x="0" y="14">THE SHOPPER'S PATH</text>
+
+        <!-- tier 2, above the product page -->
+        <rect class="bx eng" x="190" y="26" width="230" height="42" rx="2"/>
+        <text class="bt w" x="202" y="44">TIER 2 SHEET</text>
+        <text class="bd" x="202" y="60">prose · bars · evidence rows</text>
+
+        <path class="ln w" d="M232 118V74"/><path class="ln w" d="M228 80l4-6 4 6"/>
+        <text class="elab" x="240" y="94">taps “Why this feel?”</text>
+        <path class="ln" d="M372 68v50"/><path class="ln" d="M368 112l4 6 4-6"/>
+        <text class="elab" x="380" y="100">“Okay, Got it”</text>
+        <text class="elab" x="380" y="112">returns unchanged</text>
+
+        <!-- the spine -->
+        <rect class="bx" x="0" y="124" width="104" height="46" rx="2"/>
+        <text class="bt" x="12" y="144">HOME</text>
+        <text class="mono" x="12" y="160">the feed</text>
+
+        <path class="ln" d="M104 147H184"/><path class="ln" d="M178 143l6 4-6 4"/>
+        <text class="elab" x="108" y="139">taps a garment</text>
+
+        <rect class="bx eng" x="190" y="118" width="156" height="58" rx="2"/>
+        <text class="bt w" x="202" y="138">PRODUCT PAGE</text>
+        <text class="mono" x="202" y="153">where the feature answers</text>
+        <text class="bd" x="202" y="168">Tier 1 · seven answers</text>
+
+        <path class="ln" d="M346 147H408"/><path class="ln" d="M402 143l6 4-6 4"/>
+        <text class="elab" x="350" y="139">Add to Bag</text>
+
+        <rect class="bx" x="414" y="124" width="110" height="46" rx="2"/>
+        <text class="bt" x="426" y="144">SIZE SHEET</text>
+        <text class="mono" x="426" y="160">Myntra's own</text>
+
+        <path class="ln" d="M524 147H554"/><path class="ln" d="M548 143l6 4-6 4"/>
+        <rect class="bx" x="560" y="124" width="84" height="46" rx="2"/>
+        <text class="bt" x="572" y="144">BAG</text>
+        <text class="mono" x="572" y="160">unchanged</text>
+
+        <path class="ln" d="M644 147H674"/><path class="ln" d="M668 143l6 4-6 4"/>
+        <rect class="bx" x="680" y="124" width="158" height="46" rx="2"/>
+        <text class="bt" x="692" y="144">ADDRESS → PAYMENT</text>
+        <text class="mono" x="692" y="160">unchanged</text>
+
+        <path class="ln" d="M838 147H868"/><path class="ln" d="M862 143l6 4-6 4"/>
+        <rect class="bx eng" x="874" y="118" width="156" height="58" rx="2"/>
+        <text class="bt w" x="886" y="138">ORDER CONFIRMED</text>
+        <text class="mono" x="886" y="153">joins the wardrobe</text>
+        <text class="bd" x="886" y="168">records <tspan font-weight="600">who it was for</tspan></text>
+
+        <path class="ln" d="M1030 147H1060"/><path class="ln" d="M1054 143l6 4-6 4"/>
+        <rect class="bx" x="1066" y="124" width="174" height="46" rx="2"/>
+        <text class="bt" x="1078" y="144">HOME, REORDERED</text>
+        <text class="bd" x="1078" y="160">the bought garment drops</text>
+
+        <!-- the loop closing -->
+        <path class="ln w" d="M1153 170V214H268V182"/><path class="ln w" d="M264 188l4-6 4 6"/>
+        <text class="elab" x="520" y="209">the loop closes — the garment just bought is now an anchor in the switcher</text>
+
+        <!-- the other entry -->
+        <text class="lane" x="0" y="252">THE OTHER ENTRY — AND THE ONE THIS PROJECT IS ABOUT</text>
+        <rect class="bx eng" x="0" y="262" width="130" height="28" rx="2"/>
+        <text class="bt w" x="12" y="280">WISHLIST</text>
+        <path class="ln w" d="M130 276H184"/><path class="ln w" d="M178 272l6 4-6 4"/>
+        <text class="bd" x="192" y="280">The <tspan font-weight="600">wishlist</tspan> carries a third, shorter sentence shape on each product card; a tap goes to the product page.</text>
+      </svg>
+      </div>
+      <div class="ob"><span class="mono">Opening the live prototype:</span> <code>Okay, Got it</code> closes
+        the sheet and returns to the page unchanged, the back arrow works on every screen that carries
+        one, and <b>a refresh resets the world</b> to its seeded baseline — bag, wishlist and orders
+        included. Nothing is written to storage, on purpose, so a refresh is the recovery move for
+        anything at all. <code>?debug=1</code> prints the reasoning behind whichever answer you are
+        looking at.</div>
+    </div>
+
+    <div class="opanel">
+      <h4>The product page is not one screen — it is seven answers</h4>
+      <p class="t">This is the part a linear diagram gets wrong. These are not steps after one another;
+        they are <b>the same node resolving differently on the data behind it</b> — seven possible
+        answers, and no eighth. <span class="mono">In the prototype they are declared in
+        <code>lib/engine/types.ts</code>.</span></p>
+      <table class="st">
+        <thead><tr><th style="width:190px">State</th><th style="width:38%">Tier 1 renders</th><th>Fires when</th><th style="width:66px">Screen</th></tr></thead>
+        <tbody>
+          <tr class="hi"><td class="k">VERDICT_CONTRAST</td><td><span class="ui">“20% lighter than your Levis 511 jeans.”</span></td><td>An anchor exists and the axes differ legibly</td><td class="shot">05</td></tr>
+          <tr><td class="k">VERDICT_SIMILAR</td><td><span class="ui">“Almost exactly like your Levis 511 jeans.”</span></td><td>An anchor exists and nothing clears its legibility floor</td><td class="shot">16</td></tr>
+          <tr><td class="k">VERDICT_CAUTION</td><td><span class="ui">“Noticeably thinner than your HRX tee.”</span></td><td>A difference worth warning about, on an axis the category turns on</td><td class="shot">17</td></tr>
+          <tr><td class="k">OWNED</td><td><span class="ui">“You already own this in 32, bought in April.”</span></td><td>The shopper owns this exact garment. Resolves <b>before</b> eligibility — owning something needs no fabric data. No <span class="ui">Why this feel?</span> button; there is nothing to explain</td><td class="shot">18</td></tr>
+          <tr><td class="k">INVITE_NO_TYPE</td><td><span class="ui">“Own a pair of jeans? Tap it and we'll compare.”</span></td><td>History exists, but nothing of a comparable garment type</td><td class="shot">13</td></tr>
+          <tr><td class="k">INVITE_NO_HISTORY</td><td>the same sentence</td><td>No history at all for this profile</td><td class="shot">—</td></tr>
+          <tr class="hi"><td class="k">SILENT</td><td><b>nothing</b> — no card, no placeholder, no reserved gap</td><td>Fewer than two axes at medium confidence or better</td><td class="shot">14, 15</td></tr>
+        </tbody>
+      </table>
+      <div class="ob">Two things follow that are easy to miss. <b>The invitation never appears in a list</b> —
+        on the wishlist a card with no verdict simply carries no line, and nothing marks the absence.
+        And <b>the answer changes with who is shopping, not just what is viewed</b>: the profile is one
+        control shared by both cards, so a kurta bought for someone else can never be compared against
+        this shopper's jeans.</div>
+    </div>
+  </div>
+
+  <!-- ==================== ARCHITECTURE ==================== -->
+  <div class="pane" id="architecture">
+
+    <div class="opanel">
+      <h4>How Fabric Match works</h4>
+      <p class="t">Two layers, and the architectural point is <b>when each of them runs</b>. The
+        <b>prediction layer</b> is a batch job over the catalogue — one pass per garment, its output
+        stored as a fabric profile. The <b>comparison layer</b> is arithmetic against a single reference
+        garment, cheap enough to run inside the product page's existing request budget. So the expensive
+        half is paid once per SKU, not once per view. <span class="mono">(The prediction layer is the
+        half still to be built; the prototype on slide 9 stands in for it with authored values.)</span></p>
+      <div class="scroll">
+      <svg class="dg" viewBox="0 0 1240 330" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Studio clip, seller spec pack and catalogue text feed a prediction layer that produces a fabric profile per garment; at request time the shopper's closet and that profile feed a comparison layer which produces one sentence or nothing, rendered on the product page, the explainer sheet and the wishlist card">
+
+        <text class="lane" x="0" y="13">ONCE PER GARMENT — INGEST, BATCH</text>
+
+        <rect class="bx src" x="0" y="26" width="240" height="30" rx="2"/>
+        <text class="bd" x="12" y="45"><tspan font-weight="600">Studio clip</tspan> — the existing photoshoot</text>
+        <rect class="bx src" x="0" y="62" width="240" height="30" rx="2"/>
+        <text class="bd" x="12" y="81"><tspan font-weight="600">Seller spec pack</tspan> — the existing portal</text>
+        <rect class="bx src" x="0" y="98" width="240" height="30" rx="2"/>
+        <text class="bd" x="12" y="117"><tspan font-weight="600">Catalogue</tspan> text &amp; composition</text>
+
+        <path class="ln" d="M240 41H262V77"/>
+        <path class="ln" d="M240 113H262V77"/>
+        <path class="ln" d="M240 77H279"/><path class="ln" d="M273 73l6 4-6 4"/>
+
+        <rect class="bx eng" x="285" y="40" width="220" height="75" rx="2"/>
+        <text class="bt w" x="297" y="60">PREDICTION LAYER</text>
+        <text class="bd" x="297" y="79">a CV model pre-trained</text>
+        <text class="bd" x="297" y="94">on fabric physics</text>
+        <text class="mono" x="297" y="109">one pass per garment</text>
+
+        <path class="ln" d="M505 77H539"/><path class="ln" d="M533 73l6 4-6 4"/>
+
+        <rect class="bx eng" x="545" y="40" width="245" height="75" rx="2"/>
+        <text class="bt w" x="557" y="60">FABRIC PROFILE</text>
+        <text class="bd" x="557" y="79">six tactile axes per garment,</text>
+        <text class="bd" x="557" y="94">each with a confidence</text>
+        <text class="bd" x="557" y="109">and a provenance</text>
+
+        <!-- the profile is stored, then read at request time -->
+        <path class="ln" d="M667 115V160H395V194"/><path class="ln" d="M391 188l4 6 4-6"/>
+        <text class="elab" x="410" y="155">stored once, read on every view</text>
+
+        <text class="lane" x="0" y="190">PER VIEW — INSIDE THE PAGE'S EXISTING REQUEST</text>
+
+        <rect class="bx src" x="0" y="204" width="240" height="48" rx="2"/>
+        <text class="bt" x="12" y="224">THE SHOPPER'S CLOSET</text>
+        <text class="bd" x="12" y="242">kept purchases · returns excluded</text>
+
+        <path class="ln" d="M240 228H279"/><path class="ln" d="M273 224l6 4-6 4"/>
+
+        <rect class="bx eng" x="285" y="200" width="220" height="62" rx="2"/>
+        <text class="bt w" x="297" y="220">COMPARISON LAYER</text>
+        <text class="bd" x="297" y="238">difference on each axis vs</text>
+        <text class="bd" x="297" y="253">the shopper's own garment</text>
+
+        <path class="ln" d="M505 231H539"/><path class="ln" d="M533 227l6 4-6 4"/>
+
+        <rect class="bx eng" x="545" y="204" width="245" height="54" rx="2"/>
+        <text class="bt w" x="557" y="224">ONE SENTENCE — OR NOTHING</text>
+        <text class="bd" x="557" y="246">two claims at most</text>
+
+        <text class="lane" x="840" y="163">SURFACE — WHERE IT RENDERS</text>
+
+        <path class="ln" d="M790 231H820"/>
+        <path class="ln" d="M820 195V295"/>
+        <path class="ln" d="M820 195H834"/><path class="ln" d="M828 191l6 4-6 4"/>
+        <path class="ln" d="M820 245H834"/><path class="ln" d="M828 241l6 4-6 4"/>
+        <path class="ln" d="M820 295H834"/><path class="ln" d="M828 291l6 4-6 4"/>
+
+        <rect class="bx out" x="840" y="175" width="400" height="40" rx="2"/>
+        <text class="bd" x="852" y="193"><tspan font-weight="600">A line on the product page</tspan></text>
+        <text class="mono" x="852" y="207">beside the size recommendation</text>
+
+        <rect class="bx out" x="840" y="225" width="400" height="40" rx="2"/>
+        <text class="bd" x="852" y="243"><tspan font-weight="600">The “Why this feel?” sheet</tspan></text>
+        <text class="mono" x="852" y="257">the reasoning, on demand</text>
+
+        <rect class="bx out" x="840" y="275" width="400" height="40" rx="2"/>
+        <text class="bd" x="852" y="293"><tspan font-weight="600">A line on the wishlist card</tspan></text>
+        <text class="mono" x="852" y="307">the shorter sentence shape</text>
+      </svg>
+      </div>
+      <div class="legend">
+        <span><i class="b1"></i>the new work</span>
+        <span><i class="b2"></i>data and surfaces Myntra already has</span>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="opanel">
+        <h4>What already exists</h4>
+        <p class="t">Roughly <b>60–70%</b> of what Fabric Match needs is infrastructure Myntra runs today:</p>
+        <table class="st">
+          <tbody>
+            <tr><td class="k">history</td><td>Purchase records, and <b>which items were kept</b> — the wardrobe is a view over them, not a new store</td></tr>
+            <tr><td class="k">inference</td><td>Sub-2-second product-page inference, already serving size recommendations</td></tr>
+            <tr><td class="k">capture</td><td>The <b>studio photoshoot</b> every SKU already goes through, and the seller portal that collects spec packs</td></tr>
+            <tr><td class="k">UI</td><td>The block that renders the size card — the fabric line sits in the same one</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="opanel">
+        <h4>What is new</h4>
+        <p class="t">Two things, and only the first is expensive:</p>
+        <table class="st">
+          <tbody>
+            <tr class="hi"><td class="k">the model</td><td>A computer-vision model pre-trained on fabric physics, predicting <b>six tactile axes with per-axis confidence across the catalogue</b>. This is the real cost, and it is a batch job — not a per-request one</td></tr>
+            <tr><td class="k">the comparison</td><td>A layer that computes the difference between the viewed garment and one the shopper already owns, then writes it as a sentence. Arithmetic, essentially free</td></tr>
+          </tbody>
+        </table>
+        <div class="ob">Myntra already predicts <b>size</b> from the same history and surfaces it as a
+          verdict. Fabric Match adds an <b>output</b> to a stack that mostly exists — it does not build a
+          new engine.</div>
+      </div>
+    </div>
+
+    <div class="opanel">
+      <h4>The vocabulary — six axes</h4>
+      <p class="t">The dimensions a shopper can actually <em>feel</em>, expressed as differences rather
+        than specifications. Nothing here is a lab measurement: every value is a prediction about
+        experience, and it carries the two qualifiers that keep it honest.</p>
+      <table class="st">
+        <thead><tr><th style="width:130px">Axis</th><th style="width:190px">Unit</th><th>What the shopper hears</th></tr></thead>
+        <tbody>
+          <tr><td class="k">weight</td><td>GSM</td><td>heavier ↔ lighter</td></tr>
+          <tr><td class="k">thickness</td><td>mm</td><td>thicker ↔ thinner</td></tr>
+          <tr><td class="k">stretch</td><td>% recovery-adjusted</td><td>stretchier ↔ more rigid</td></tr>
+          <tr><td class="k">opacity</td><td>0–100</td><td>more opaque ↔ more sheer</td></tr>
+          <tr><td class="k">structure</td><td>bending index</td><td>stiffer ↔ softer, more fluid</td></tr>
+          <tr><td class="k">surface</td><td>ordinal</td><td>textured ↔ smooth</td></tr>
+        </tbody>
+      </table>
+      <div class="ob"><b>Confidence</b> — how far the available data actually constrains the value; below
+        medium it is never spoken. <b>Provenance</b> — whether a value came from the catalogue, was
+        predicted, or was inferred from reviews. Provenance is what lets the explainer sheet show its
+        sources instead of asking to be trusted.</div>
+    </div>
+
+    <div class="opanel">
+      <h4>Shipping it is one widget</h4>
+      <p class="t">Myntra's product page is <b>not a hand-laid template — it is an ordered list of
+        server-driven widgets</b>, verified from its own payload:</p>
+      <p class="t mono" style="font-size:11.4px;line-height:1.7">PDP_NATIVE_TOOLBAR ▸ ADD_BUTTONS ▸ IMAGE_SWIPE ▸ <b>PDP_PRODUCT_INFO</b> ▸ ADD_BUTTONS ▸ CONTENT_GROUPS ▸ <b style="white-space:nowrap">[&nbsp;FABRIC_AND_FEEL&nbsp;]</b> ▸ BRAND_QUALITY_INFO ▸ PRODUCT_RACK ▸ REVIEWS_QNA ▸ CROSS_LINKS ▸ MORE_INFO</p>
+      <p class="t">The comparison line lives inside <b>PDP_PRODUCT_INFO</b>, where size selection already
+        sits. The explainer sheet slots in as a new widget between <b>CONTENT_GROUPS</b> and
+        <b>BRAND_QUALITY_INFO</b>. So the deployment is <b>one widget added to an existing list</b> —
+        not a redesign, and not a new surface.</p>
+      <div class="ob"><b>And it is allowed to say nothing.</b> When fewer than two axes clear confidence
+        on a garment, the feature renders nothing at all — no placeholder, no greyed row, no reserved
+        gap. Abstention is a product rule, not an error path, which is why there is no empty state to
+        design.</div>
+    </div>
+  </div>
+
+  <div class="back"><a href="slide-9-prototype-slidedoc-v3.html">← back to slide 9</a></div>
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  function show(id){
+    if(!document.getElementById(id)){ id = 'userflow'; }
+    panes.forEach(function(p){
+      if(p.id === id){ p.classList.add('on'); } else { p.classList.remove('on'); }
+    });
+    tabs.forEach(function(t){
+      if(t.getAttribute('data-pane') === id){ t.classList.add('on'); } else { t.classList.remove('on'); }
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = t.getAttribute('data-pane');
+      show(id);
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + id); } catch(err) {}
+    });
+  });
+  function fromHash(){ show((window.location.hash || '').replace('#','') || 'userflow'); }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+})();
+</script>
+</body>
+</html>

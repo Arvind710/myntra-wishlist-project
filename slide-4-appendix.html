@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 4 · Supporting artefact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#DCE2E7;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1300px;margin:0 auto;padding:40px 22px 60px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:38ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:104ch}
+
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin:0 0 14px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 18px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}
+.pane.on{display:block}
+
+.opanel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 23px;margin-bottom:12px}
+.opanel:last-child{margin-bottom:0}
+.opanel h4{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;font-size:17px;line-height:1.2;
+  letter-spacing:-.008em;margin-bottom:10px}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:10px;max-width:114ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+
+table.seg{width:100%;border-collapse:collapse;font-size:12.2px}
+table.seg th{font-family:'IBM Plex Mono',monospace;font-size:9.8px;font-weight:600;
+  letter-spacing:.04em;color:var(--faint);text-align:left;padding:0 11px 6px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom;line-height:1.25}
+table.seg td{padding:9px 11px 9px 0;border-bottom:1px solid #EEF1F4;vertical-align:top;line-height:1.35}
+table.seg tr:last-child td{border-bottom:none}
+table.seg td b{font-weight:600}
+table.seg td.mono{font-family:'IBM Plex Mono',monospace;font-size:11.2px;color:var(--ink2);white-space:nowrap}
+table.seg td .sm{display:block;color:var(--faint);font-size:11px;margin-top:2px;line-height:1.3}
+table.seg tr.win td{background:#F5F8FA}
+table.seg tr.win td:first-child{box-shadow:inset 3px 0 0 var(--win);padding-left:9px}
+
+.ob{border-left:3px solid var(--win);background:#F5F8FA;padding:10px 13px;font-size:12.7px;margin-top:11px}
+.ob.warn{border-left-color:var(--leak);background:#FDF6F1}
+.ob b{font-weight:600}
+
+.hbx{border:1px solid var(--rule);border-left:3px solid var(--win);margin-bottom:11px}
+.hbx:last-child{margin-bottom:0}
+.hbh{background:#F5F8FA;padding:10px 13px;display:flex;gap:11px;align-items:baseline;
+  border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.hbh .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
+  color:#fff;background:var(--win);padding:1px 7px;flex:0 0 auto}
+.hbh .n{font-weight:600;font-size:13.4px}
+.hbh .l{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);
+  letter-spacing:.05em;margin-left:auto}
+.hbb{padding:11px 13px 12px}
+.hbb .claim{font-size:12.9px;margin-bottom:9px;line-height:1.45}
+.hbb .claim b{font-weight:600}
+.sh{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid #EEF1F4}
+.sh .sk{font-family:'IBM Plex Mono',monospace;font-size:10.3px;font-weight:600;
+  color:var(--win);flex:0 0 34px;padding-top:1px}
+.sh .st{flex:0 0 132px;font-weight:600;font-size:12.2px}
+.sh .sd{flex:1 1 auto;font-size:12.2px;color:var(--ink2);line-height:1.4}
+@media print{body{background:#fff}.wrap{padding:0}.pane{display:block!important}.tabs{display:none}}
+
+/* opportunity size */
+.chain{border:1px solid var(--rule);max-width:760px}
+.cr{display:grid;grid-template-columns:1fr 92px 108px;gap:12px;align-items:center;
+  padding:9px 13px;border-bottom:1px solid #EEF1F4;font-size:13.4px}
+.cr:last-child{border-bottom:none}
+.cr .cl{line-height:1.3}
+.cr .cl span{display:block;color:var(--faint);font-size:11.6px;margin-top:2px;line-height:1.3}
+.cr.sec{background:#F2F5F7;padding-top:6px;padding-bottom:6px}
+.cr.sec .cl{font-family:'IBM Plex Mono',monospace;font-size:10.4px;font-weight:600;
+  letter-spacing:.1em;color:var(--faint)}
+.cr.fin{background:var(--win);border-top:none}
+.cr.fin .cl,.cr.fin .cq{color:#fff;font-weight:600}
+.cr.fin .cq{font-size:18px}
+.cr.fin .cx{color:#CFE4F2}
+.cr .cx{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);text-align:right}
+.cr .cq{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--ink);text-align:right}
+.cr.head{background:var(--ink)}
+.cr.head .cl,.cr.head .cq{color:#fff;font-weight:600}
+.cr.res{background:#EDF5FA;border-top:1px solid var(--win)}
+.cr.res .cl{font-weight:600}
+.cr.res .cq{color:var(--win);font-size:15.5px}
+
+table.mx{width:100%;border-collapse:collapse;font-size:13.4px;margin-top:6px;max-width:900px}
+table.mx th{font-family:'IBM Plex Mono',monospace;font-size:10.4px;font-weight:600;
+  color:var(--faint);padding:0 6px 8px;border-bottom:1px solid var(--rule);text-align:center;line-height:1.25}
+table.mx th:first-child{width:1%}
+table.mx th.w{color:var(--win)}
+table.mx td{padding:8px 6px;border-bottom:1px solid #E7ECEF;text-align:center;
+  font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--dead)}
+table.mx td:first-child{text-align:left;padding-left:0;font-family:'IBM Plex Sans',sans-serif;
+  font-size:13.4px;font-weight:400;color:var(--ink);white-space:nowrap}
+table.mx td.y{color:var(--win)}table.mx td.no{color:var(--leak)}table.mx td.na{color:var(--track)}
+table.mx td.w{background:#E7F1F8}
+table.mx tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>SUPPORTING ARTEFACT</b> · LINKED FROM SLIDE 4</div>
+    <h1>The full working behind slide 4.</h1>
+    <p class="sub">Three things kept off the slide so it stays readable: every column of the segmentation, the hypothesis space in full, and the arithmetic behind the opportunity size.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="segments" type="button">SEGMENTATION ANALYSIS</button>
+    <button class="tab" data-pane="hypotheses" type="button">HYPOTHESIS SPACE</button>
+    <button class="tab" data-pane="opportunity" type="button">OPPORTUNITY SIZE</button>
+  </div>
+
+<!-- TAB 1 -->
+<div class="pane on" id="segments">
+
+  <div class="opanel">
+    <h4>The groups are derived from behaviour, not guessed at from motivation.</h4>
+    <p class="t">Three questions are asked of every wishlister who reached a saved item and left without adding it, and the answers are already visible in how they behave. <b>Is there an intent to purchase?</b> — no intent means a collector. <b>Is the purchase waiting on a future event?</b> — waiting on a price drop, a restock or an occasion means later. <b>Has the buying decision been made?</b> — and this is the link back to slide 3: <b>an unresolved doubt about the item is what it means for a decision to still be open.</b> A voiced doubt <i>is</i> an open decision.</p>
+    <p class="t">Because the three questions are asked in a fixed order and every answer routes somewhere, the six groups are mutually exclusive and collectively exhaustive: every wishlister lands in exactly one, and none is left out.</p>
+  </div>
+
+  <div class="opanel">
+    <h4>The three questions, as a matrix.</h4>
+    <p class="t">The same three answers that route the tree, read across all five groups at once. Only one group answers yes, yes, no &#8212; and that is the segment we build for.</p>
+    <table class="mx">
+      <thead><tr><th></th><th>&#9312;&nbsp;Collectors</th><th>&#9313;&nbsp;Lapsed Intenders</th><th>&#9316;&nbsp;Committed Waiters</th><th>&#9317;&nbsp;Hesitant Waiters</th><th class="w">&#9315;&nbsp;Undecided Buyers</th></tr></thead>
+      <tbody>
+        <tr><td>Intends to buy</td><td class="no">&#10005;</td><td class="no">&#10005;</td><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y w">&#10003;</td></tr>
+        <tr><td>Could buy today</td><td class="na">&#8212;</td><td class="na">&#8212;</td><td class="no">&#10005;</td><td class="no">&#10005;</td><td class="y w">&#10003;</td></tr>
+        <tr><td>Decided which item to buy</td><td class="na">&#8212;</td><td class="na">&#8212;</td><td class="y">&#10003;</td><td class="no">&#10005;</td><td class="no w">&#10005;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="opanel">
+    <h4>All six groups, all columns.</h4>
+    <table class="seg">
+      <thead><tr>
+        <th style="width:16%">Group</th>
+        <th>Intent to<br>purchase</th>
+        <th>Time to<br>purchase</th>
+        <th>Decision<br>made</th>
+        <th style="width:19%">Re-engagement<br>within 30 days</th>
+        <th>Urgency</th>
+        <th style="width:17%">Price<br>sensitivity</th>
+        <th style="width:22%">Binding<br>constraint</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><b>① Collectors</b><span class="sm">saved as reference or inspiration</span></td>
+          <td class="mono">No</td><td class="mono">—</td><td class="mono">—</td>
+          <td>Low — often a single view and never again</td>
+          <td class="mono">Zero</td>
+          <td>N/A — price was never a factor</td>
+          <td>None. No purchase was ever intended, and converting them would be optimising against the user.</td>
+        </tr>
+        <tr>
+          <td><b>② Lapsed Intenders</b><span class="sm">meant to buy; the intent has gone</span></td>
+          <td class="mono">Lapsed</td><td class="mono">—</td><td class="mono">—</td>
+          <td>Was high, now zero</td>
+          <td class="mono">Zero</td>
+          <td>Varies — sometimes the reason they left</td>
+          <td>None recoverable. The want faded or they bought it elsewhere.</td>
+        </tr>
+        <tr>
+          <td><b>③ Ready Buyers</b><span class="sm">intent, soon, nothing unresolved</span></td>
+          <td class="mono">Yes</td><td class="mono">Soon</td><td class="mono">Yes</td>
+          <td>Very high — repeat views, size and stock checks</td>
+          <td class="mono">High</td>
+          <td>Low — the price is already accepted</td>
+          <td>Not a doubt. If they have not bought, the friction sits in checkout or fulfilment — a different drop-off entirely.</td>
+        </tr>
+        <tr class="win">
+          <td><b>④ Undecided Buyers</b> ★<span class="sm">intent, soon, and a doubt in the way</span></td>
+          <td class="mono">Yes</td><td class="mono">Soon</td><td class="mono">No</td>
+          <td>Very high — repeat views, size chart, reviews, near-substitutes saved alongside</td>
+          <td class="mono">High</td>
+          <td>A budget is already set — the item sits inside it</td>
+          <td><b>An unresolved doubt about the item itself.</b> Not money, not timing, not availability.</td>
+        </tr>
+        <tr>
+          <td><b>⑤ Committed Waiters</b><span class="sm">decided, waiting on a condition</span></td>
+          <td class="mono">Yes</td><td class="mono">Later</td><td class="mono">Yes</td>
+          <td>Moderate — spikes near the trigger</td>
+          <td class="mono">Low now,<br>high at trigger</td>
+          <td>Varies by trigger — often the trigger <i>is</i> the price</td>
+          <td>An external condition — a sale, a restock, an occasion. Nothing on the page can move it.</td>
+        </tr>
+        <tr>
+          <td><b>⑥ Hesitant Waiters</b><span class="sm">waiting, and still unsure</span></td>
+          <td class="mono">Yes</td><td class="mono">Later</td><td class="mono">No</td>
+          <td>Moderate — irregular</td>
+          <td class="mono">Low</td>
+          <td>Reported often, and usually overstated — value doubt more than budget</td>
+          <td>Two at once: an external condition <i>and</i> an open decision. The timing has to clear before the doubt even matters.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="opanel">
+    <h4>Why Undecided Buyers, and not one of the other five.</h4>
+    <p class="t">Each of the other five is ruled out by something the product cannot reach, and the reasoning needs no numbers to follow.</p>
+    <p class="t"><b>① Collectors and ② Lapsed Intenders</b> have no live intent. There is no purchase to recover, and building for them would mean pushing people towards something they have already decided against — or never wanted.</p>
+    <p class="t"><b>⑤ Committed Waiters and ⑥ Hesitant Waiters</b> are blocked by an event outside the app: a sale that has not started, a size that is out of stock, an occasion that has not arrived. No amount of information on the product page brings that event forward.</p>
+    <p class="t"><b>③ Ready Buyers</b> have already decided. If they have not bought, the friction is in checkout, payment or delivery — a real problem, and a different drop-off from the one this project is solving.</p>
+    <div class="ob"><b>That leaves one group whose blocker is the decision itself</b> — live intent, nothing external in the way, money not the constraint, and a specific doubt holding the decision open. It is the only group where a better answer on the product page converts directly into a purchase. The discovery engine on slide 3 pointed in the same direction independently.</div>
+  </div>
+
+</div>
+
+<!-- TAB 2 -->
+<div class="pane" id="hypotheses">
+
+  <div class="opanel">
+    <h4>Six stages a decision has to clear, and the ways each one fails.</h4>
+    <p class="t">An Undecided Buyer has to get past six questions before a saved item can go into the bag: <b>is it what it appears to be · will it work for me · is it the best option · is it worth the money · why buy today · do I still want it.</b> A decision that stays open has failed at one of them. Each hypothesis below is one of those stages; the sub-hypotheses under it are the specific ways that stage can fail.</p>
+    <p class="t"><b>The survey asks which stage binds. The interviews ask why.</b> A hypothesis is refuted when respondents say that stage was never in question for them.</p>
+  </div>
+
+  <div class="opanel">
+
+    <div class="hbx">
+      <div class="hbh"><span class="k">H1</span><span class="n">Digital–real gap</span><span class="l">IS IT WHAT IT APPEARS TO BE?</span></div>
+      <div class="hbb">
+        <div class="claim"><b>Undecided Buyers don't add to bag because photographs and a composition string can't say how the fabric feels, how it hangs, or what the true colour is.</b></div>
+        <div class="sh"><span class="sk">H1.1</span><span class="st">Product truth</span><span class="sd">Photographs cannot convey fabric weight, drape, opacity, stretch, true colour or finish quality — so the doubt is structurally unresolvable on the page, and each return visit re-runs an identical evaluation against identical inputs.</span></div>
+        <div class="sh"><span class="sk">H1.2</span><span class="st">Source trust</span><span class="sd">Trust in the platform does not transfer to the individual listing, and nothing distinguishes a reliable seller from a risky one.</span></div>
+      </div>
+    </div>
+
+    <div class="hbx">
+      <div class="hbh"><span class="k">H2</span><span class="n">Personal fit</span><span class="l">WILL IT WORK FOR ME?</span></div>
+      <div class="hbb">
+        <div class="claim"><b>Undecided Buyers don't add to bag because size charts, model shots and product details can't say whether it will fit my body, whether the style suits me, or whether it goes with what I already own.</b></div>
+        <div class="sh"><span class="sk">H2.1</span><span class="st">Body fit</span><span class="sd">Sizing varies across brands and the chart gives measurements that cannot be mapped onto lived fit, so no confident size choice exists and the two candidate sizes carry unequal risk.</span></div>
+        <div class="sh"><span class="sk">H2.2</span><span class="st">Aesthetic fit</span><span class="sd">Model imagery answers “does this look good”, not “does this look good on me” — the garment has to be mentally re-rendered onto a different body with no reference point.</span></div>
+        <div class="sh"><span class="sk">H2.3</span><span class="st">Purpose fit</span><span class="sd">The page is organised around the item rather than the use, so occasion-appropriateness and repeat-wear versatility cannot be evaluated.</span></div>
+        <div class="sh"><span class="sk">H2.4</span><span class="st">Wardrobe fit</span><span class="sd">The existing wardrobe exists only in memory, so working out what it pairs with must be simulated mentally — high effort, and therefore easily deferred.</span></div>
+      </div>
+    </div>
+
+    <div class="hbx">
+      <div class="hbh"><span class="k">H3</span><span class="n">Open comparison</span><span class="l">IS IT THE BEST OPTION?</span></div>
+      <div class="hbb">
+        <div class="claim"><b>Undecided Buyers don't add to bag because near-identical saved options can't be put side by side, so the shortlist never narrows and looking a bit further always feels sensible.</b></div>
+        <div class="sh"><span class="sk">H3.1</span><span class="st">Set comparison</span><span class="sd">Near-substitutes saved for the same need cannot be viewed together, and brands describe attributes inconsistently — so the candidate set never narrows and each visit re-evaluates one item in isolation.</span></div>
+        <div class="sh"><span class="sk">H3.2</span><span class="st">Market comparison</span><span class="sd">No signal indicates the search is complete, so continuing to look always feels prudent and committing always feels premature.</span></div>
+      </div>
+    </div>
+
+    <div class="hbx">
+      <div class="hbh"><span class="k">H4</span><span class="n">Value for money</span><span class="l">IS IT WORTH IT?</span></div>
+      <div class="hbb">
+        <div class="claim"><b>Undecided Buyers don't add to bag because the price is affordable but can't be judged fair, since the quality it depends on is itself unresolved.</b></div>
+        <div class="sh"><span class="sk">H4.1</span><span class="st">Value judgment</span><span class="sd">Value is a ratio of inferred quality to price, so unresolved quality doubt makes it uncomputable even when the price sits comfortably inside the budget — the blocker presents as price but originates in H1.</span></div>
+        <div class="sh"><span class="sk">H4.2</span><span class="st">Price anchoring</span><span class="sd">The price at the moment of saving becomes the reference point, so any later increase registers as a loss rather than a neutral change, and buying now feels like accepting a worse deal.</span></div>
+      </div>
+    </div>
+
+    <div class="hbx">
+      <div class="hbh"><span class="k">H5</span><span class="n">No reason for today</span><span class="l">WHY BUY TODAY?</span></div>
+      <div class="hbb">
+        <div class="claim"><b>Undecided Buyers don't add to bag because nothing makes buying today better than buying next week, while being wrong still costs a return.</b></div>
+        <div class="sh"><span class="sk">H5.1</span><span class="st">Risk tolerance</span><span class="sd">Confidence may be objectively adequate, but the perceived effort of a return makes adequate insufficient — they wait for a level of certainty the product cannot supply.</span></div>
+        <div class="sh"><span class="sk">H5.2</span><span class="st">Social confirmation</span><span class="sd">The decision has been handed to someone whose reply is slow, vague or never comes, and the product has no idea the user is waiting on another person — so the decision stalls invisibly.</span></div>
+        <div class="sh"><span class="sk">H5.3</span><span class="st">Action trigger</span><span class="sd">Urgency attaches to the need, never to the decision, so deferring stays free and invisible — “later” is always the rational choice, and later carries no deadline of its own.</span></div>
+      </div>
+    </div>
+
+    <div class="hbx">
+      <div class="hbh"><span class="k">H6</span><span class="n">Lost context</span><span class="l">DO I STILL WANT IT?</span></div>
+      <div class="hbb">
+        <div class="claim"><b>Undecided Buyers don't add to bag because the save kept the item but not the reason for it, so every visit starts the decision again from nothing.</b></div>
+        <div class="sh"><span class="sk">H6.1</span><span class="st">No record of why</span><span class="sd">The wishlist preserves the item but not the occasion, the need, or what it was being weighed against — so the earlier reasoning cannot be re-derived and the item is evaluated cold each time.</span></div>
+        <div class="sh"><span class="sk">H6.2</span><span class="st">Desire drift</span><span class="sd">Time has weakened the original impulse, and nothing helps them tell “I've gone off this” apart from “I'm still unsure” — so they resolve the ambiguity by deferring rather than by buying or removing.</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- TAB 3 -->
+<div class="pane" id="opportunity">
+
+  <div class="opanel">
+    <h4>Converting ten more Undecided Buyers in every hundred is worth &#8377;504 Cr a year.</h4>
+    <p class="t">Every step below is a share of the step above it, so the segment size falls out of the same three questions the segmentation uses. The last three rows turn that population into money at a <b>10% conversion lift</b> and Myntra's average order value.</p>
+
+    <div class="chain">
+      <div class="cr head"><div class="cl">Myntra monthly active users</div><div class="cx"></div><div class="cq">75.0 M</div></div>
+      <div class="cr"><div class="cl">wishlist at least one item in the month</div><div class="cx">&#215; 30%</div><div class="cq">22.5 M</div></div>
+      <div class="cr"><div class="cl">return and reach a saved item within 30 days</div><div class="cx">&#215; 45%</div><div class="cq">10.1 M</div></div>
+      <div class="cr"><div class="cl">leave without adding it to the bag</div><div class="cx">&#215; 70%</div><div class="cq">7.1 M</div></div>
+      <div class="cr"><div class="cl">still intend to buy it<span>excludes Collectors and Lapsed Intenders</span></div><div class="cx">&#215; 80%</div><div class="cq">5.7 M</div></div>
+      <div class="cr"><div class="cl">not waiting on a future event &#8212; could buy today<span>excludes Committed Waiters and Hesitant Waiters</span></div><div class="cx">&#215; 70%</div><div class="cq">4.0 M</div></div>
+      <div class="cr res"><div class="cl">have not yet decided which item to buy<span>excludes Ready Buyers &#8212; what remains is Undecided Buyers</span></div><div class="cx">&#215; 70%</div><div class="cq">2.8 M</div></div>
+      <div class="cr sec"><div class="cl">IF WE CONVERT 10 IN EVERY 100</div><div class="cx"></div><div class="cq"></div></div>
+      <div class="cr"><div class="cl">new orders a month</div><div class="cx">&#215; 10%</div><div class="cq">280,000</div></div>
+      <div class="cr"><div class="cl">at an average order value of &#8377;1,500</div><div class="cx">&#215; &#8377;1,500</div><div class="cq">&#8377;42 Cr</div></div>
+      <div class="cr fin"><div class="cl">additional GMV in the first full year</div><div class="cx">&#215; 12</div><div class="cq">&#8377;504 Cr</div></div>
+    </div>
+  </div>
+
+</div>
+
+
+
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  function show(id){
+    if(!document.getElementById(id)){ id = 'segments'; }
+    panes.forEach(function(p){
+      if(p.id === id){ p.classList.add('on'); } else { p.classList.remove('on'); }
+    });
+    tabs.forEach(function(t){
+      if(t.getAttribute('data-pane') === id){ t.classList.add('on'); } else { t.classList.remove('on'); }
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = t.getAttribute('data-pane');
+      show(id);
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + id); } catch(err) {}
+    });
+  });
+  function fromHash(){ show((window.location.hash || '').replace('#','') || 'segments'); }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+})();
+</script>
+</body>
+</html>

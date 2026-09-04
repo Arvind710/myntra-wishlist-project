@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 1 — Sources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#EDF0F2;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#DCE2E7;--track:#C1CBD3;--win:#0072B2;--leak:#D55E00;--dead:#7C858E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 22px 60px}
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:16px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--faint);font-weight:600;display:block;margin-bottom:9px}
+.eyebrow b{color:var(--win)}
+h1{font-family:Archivo,sans-serif;font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:40ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.2px;max-width:104ch}
+
+.grp{font-family:"IBM Plex Mono",monospace;font-size:10.2px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--faint);font-weight:600;margin:20px 0 8px}
+.s{background:var(--card);border:1px solid var(--rule);border-radius:3px;
+  padding:13px 15px;margin-bottom:8px;display:grid;grid-template-columns:34px 1fr;gap:14px}
+.s:target{border-color:var(--win);box-shadow:inset 3px 0 0 var(--win);background:#F5F8FA}
+.s .n{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;color:var(--win);
+  text-align:right;padding-top:1px}
+.s .t{min-width:0}
+.s .ttl{font-size:13.4px;font-weight:600;line-height:1.32}
+.s .meta{font-size:12.2px;color:var(--ink2);margin-top:3px;line-height:1.4}
+.s .use{font-size:12px;color:var(--faint);margin-top:5px;line-height:1.4}
+.s .use b{color:var(--ink2);font-weight:600}
+.s a{font-family:"IBM Plex Mono",monospace;font-size:11.4px;color:var(--win);
+  text-decoration:none;border-bottom:1px solid var(--rule);word-break:break-all;
+  display:inline-block;margin-top:6px}
+.s a:hover{border-bottom-color:var(--win)}
+.note{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule);
+  font-size:12.2px;color:var(--faint);line-height:1.55;max-width:110ch}
+.note b{color:var(--ink2);font-weight:600}
+@media print{body{background:#fff}.wrap{padding:0}}
+
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin:0 0 18px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:12px 16px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}.pane.on{display:block}
+.loopfig{background:#fff;border:1px solid var(--rule);padding:22px 24px 24px;margin-bottom:14px}
+.loopfig h4{font-family:'Archivo',sans-serif;font-weight:700;font-size:19px;margin:0 0 6px}
+.loopfig p.t{color:var(--ink2);font-size:14px;line-height:1.55;margin:0 0 18px;max-width:92ch}
+.loopfig svg{width:100%;height:auto;display:block}
+.loopfig .fl path{fill:none;stroke:#9AA4AD;stroke-width:1.6}
+.loopfig .fb path{fill:none;stroke:var(--win);stroke-width:1.6;stroke-dasharray:5 4}
+.loopfig .nd rect{fill:#FAFBFC;stroke:var(--rule);stroke-width:1}
+.loopfig .nd.start rect,.loopfig .nd.fbn rect{fill:#EDF5FA;stroke:#BCD9EC}
+.loopfig .nd.end rect{fill:var(--ink);stroke:var(--ink)}
+.loopfig .t2{font-family:'IBM Plex Sans',sans-serif;font-size:11.6px;font-weight:600;fill:var(--ink)}
+.loopfig .d{font-family:'IBM Plex Sans',sans-serif;font-size:10px;fill:var(--faint)}
+.loopfig .inv{fill:#fff}.loopfig .d.inv{fill:#AEB7BF}
+.loopfig .lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;
+  letter-spacing:.09em;fill:var(--win)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <span class="eyebrow"><b>Slide 1</b> · Sources</span>
+  <h1>Every figure on slide 1, and where it came from.</h1>
+  <p class="sub">Numbered to match the superscripts on the slide. Each entry names the claim it supports, so a figure can be traced back without reading the whole report.</p>
+</header>
+
+<div class="tabs">
+  <button class="tab on" data-pane="sources" type="button">SOURCES</button>
+  <button class="tab" data-pane="loop" type="button">GROWTH LOOP</button>
+</div>
+
+<div class="pane on" id="sources">
+<div class="grp">Market</div>
+
+<div class="s" id="s1">
+  <div class="n">1</div>
+  <div class="t">
+    <div class="ttl">How India Shops Online 2026</div>
+    <div class="meta">Bain &amp; Company in collaboration with Flipkart · published 8 April 2026</div>
+    <div class="use"><b>Supports:</b> e-retail GMV of $65–66bn in 2025 growing 19–21%; $170–180bn projected by 2030 at 20%+ a year; 290–300M annual online shoppers; e-retail at 1.6% of GDP against 13–14% in China; Gen Z at 40–45% of shoppers, half of incremental orders, spend per shopper growing 2.5× faster; growth propelled by both shopper penetration and spend per shopper.</div>
+    <a href="https://www.bain.com/insights/how-india-shops-online-2026/" target="_blank" rel="noopener">bain.com/insights/how-india-shops-online-2026/</a><br>
+    <a href="https://storage.googleapis.com/flipkart-stories-media/How_India_Shops_Online_2026_060094273e/How_India_Shops_Online_2026_060094273e.pdf" target="_blank" rel="noopener">Full report PDF (Flipkart Stories)</a><br>
+    <a href="https://www.business-standard.com/industry/news/india-s-e-retail-market-hits-66-billion-as-growth-reaccelerates-126040901077_1.html" target="_blank" rel="noopener">Business Standard summary</a>
+  </div>
+</div>
+
+<div class="s" id="s2">
+  <div class="n">2</div>
+  <div class="t">
+    <div class="ttl">India Online Fashion Retail Market, 2026–2030</div>
+    <div class="meta">Technavio</div>
+    <div class="use"><b>Supports:</b> online fashion forecast to grow at roughly 21% CAGR, adding about $56bn between 2026 and 2030.</div>
+  
+    <a href="https://www.technavio.com/report/online-fashion-retail-market-industry-in-india-analysis" target="_blank" rel="noopener">technavio.com — India Online Fashion Retail Market 2026–2030</a><br>
+    <a href="https://www.researchandmarkets.com/report/india-fashion-ecommerce-market" target="_blank" rel="noopener">Research and Markets listing</a>
+  </div>
+</div>
+
+<div class="s" id="s3">
+  <div class="n">3</div>
+  <div class="t">
+    <div class="ttl">Myntra FY25 financial results, from RoC filings</div>
+    <div class="meta">Reported by Entrackr and Medianama, September 2025</div>
+    <div class="use"><b>Supports:</b> FY25 revenue ₹6,043 Cr (+18%); net profit ₹548 Cr; revenue split — logistics ₹2,919 Cr, marketplace ₹2,052 Cr, advertising ₹915 Cr (+28%), other ₹158 Cr.</div>
+  
+    <a href="https://entrackr.com/fintrackr/myntra-profit-zooms-18x-to-rs-548-cr-in-fy25-10452797" target="_blank" rel="noopener">entrackr.com — Myntra profit zooms 18X to Rs 548 Cr in FY25</a><br>
+    <a href="https://www.franchiseindia.com/insights/en/news/myntra-posts-18x-surge-in-profit-to-548-cr-in-fy25-crosses-6000-cr-revenue.57424" target="_blank" rel="noopener">Franchise India summary (revenue mix)</a>
+  </div>
+</div>
+
+<div class="grp">Myntra</div>
+
+<div class="s" id="s4">
+  <div class="n">4</div>
+  <div class="t">
+    <div class="ttl">Myntra scale figures — monthly and annual active users</div>
+    <div class="meta">YourStory, February 2026 · and ANI, December 2025</div>
+    <div class="use"><b>Supports:</b> over 75 million monthly active users; coverage across 98% of serviceable pincodes; approximately 200 million annual active users by close of 2025.</div>
+    <a href="https://yourstory.com/2026/02/startup-scale-myntras-zero-commission-model-powering-indias-next-d2c-wave" target="_blank" rel="noopener">yourstory.com — Myntra's zero-commission model (75M MAU, 98% pincodes)</a><br>
+    <a href="https://www.babushahi.com/business.php?id=214381" target="_blank" rel="noopener">ANI via Babushahi — ~200M annual active users</a>
+  </div>
+</div>
+
+<div class="s" id="s5">
+  <div class="n">5</div>
+  <div class="t">
+    <div class="ttl">Daily active users across Indian fashion apps</div>
+    <div class="meta">Bank of America, citing Sensor Tower data · June 2026, reported by Entrackr</div>
+    <div class="use"><b>Supports:</b> Myntra at about 21M DAUs in June 2026; Ajio roughly 6–7M; Nykaa Fashion nearly 2M; Shein and Tata CLiQ below that. Used for the share-of-daily-users bar.</div>
+    <a href="https://entrackr.com/news/flipkart-ahead-of-amazon-and-meesho-in-daus-myntra-leads-fashion-apps-bofa-12053978" target="_blank" rel="noopener">entrackr.com — Flipkart ahead in DAUs; Myntra leads fashion apps (BofA)</a>
+  </div>
+</div>
+
+<div class="s" id="s6">
+  <div class="n">6</div>
+  <div class="t">
+    <div class="ttl">M-Now rapid delivery expansion</div>
+    <div class="meta">Myntra press releases, February–May 2026</div>
+    <div class="use"><b>Supports:</b> 30-minute delivery live across 10–11 cities from 90+ dark stores.</div>
+  
+    <a href="https://blog.myntra.com/myntras-m-now-30-minute-delivery-patna-fashion-beauty/" target="_blank" rel="noopener">blog.myntra.com — M-Now launches in Patna</a><br>
+    <a href="https://apparelresources.com/business-news/retail/myntra-expands-hyper-speed-m-now-delivery-service-four-tier-2-cities/" target="_blank" rel="noopener">Apparel Resources — M-Now expands to four Tier-2 cities</a><br>
+    <a href="https://yourstory.com/2025/11/myntras-m-now-scales-to-80-dark-stores" target="_blank" rel="noopener">YourStory — M-Now scales to 80 dark stores</a>
+  </div>
+</div>
+
+<div class="s" id="s7">
+  <div class="n">7</div>
+  <div class="t">
+    <div class="ttl">Myntra AI capability announcement</div>
+    <div class="meta">Myntra, July 2026</div>
+    <div class="use"><b>Supports:</b> AI size-and-fit layer across ~85% of eligible apparel; personalised search reaching 90% of monthly users; conversational assistant; seller onboarding cut from 10–15 days to 1–2; catalogue generation from a day to about four hours; supply-chain simulations from two days to an hour; feature rollout 40% faster.</div>
+  
+    <a href="https://yourstory.com/2026/07/myntra-ai-seller-onboarding-shopping-tools" target="_blank" rel="noopener">yourstory.com — Inside Myntra&rsquo;s AI playbook</a><br>
+    <a href="https://www.business-standard.com/companies/start-ups/myntra-deploys-ai-at-scale-as-rivals-intensify-fashion-ecommerce-push-126072201436_1.html" target="_blank" rel="noopener">Business Standard — Myntra deploys AI at scale</a><br>
+    <a href="https://apparelresources.com/business-news/retail/myntra-expands-ai-capabilities-across-customer-seller-operations/" target="_blank" rel="noopener">Apparel Resources — AI across customer and seller operations</a>
+  </div>
+</div>
+
+<div class="grp">Wishlist behaviour and category economics</div>
+
+<div class="s" id="s8">
+  <div class="n">8</div>
+  <div class="t">
+    <div class="ttl">Wishlist or Shopping Cart?</div>
+    <div class="meta">Nielsen Norman Group</div>
+    <div class="use"><b>Supports:</b> shoppers' mental models differ between the two surfaces — a cart can hold maybes, while adding to a list is a deliberate act of marking something as wanted.</div>
+  
+    <a href="https://www.nngroup.com/articles/wishlist-or-cart/" target="_blank" rel="noopener">nngroup.com/articles/wishlist-or-cart/</a>
+  </div>
+</div>
+
+<div class="s" id="s9">
+  <div class="n">9</div>
+  <div class="t">
+    <div class="ttl">Saved-item re-engagement performance</div>
+    <div class="meta">Forrester, cited in Invesp wishlist conversion research</div>
+    <div class="use"><b>Supports:</b> prompts about a saved item bring shoppers back to buy at several times the rate of ordinary re-engagement (reported as 5–10×).</div>
+  
+    <a href="https://www.invespcro.com/blog/10-ways-to-boost-gift-cards-and-wish-lists-conversions-on-ecommerce-websites/" target="_blank" rel="noopener">invespcro.com — wish list conversion research (cites the Forrester webinar)</a><br>
+    <a href="https://kissmetrics.io/glossary/wishlist-conversion" target="_blank" rel="noopener">Kissmetrics — wishlist conversion definition</a>
+  </div>
+</div>
+
+<div class="s" id="s10">
+  <div class="n">10</div>
+  <div class="t">
+    <div class="ttl">Cart and saved-item abandonment benchmarks</div>
+    <div class="meta">Baymard Institute, and 2026 e-commerce abandonment benchmarks</div>
+    <div class="use"><b>Supports:</b> around 70% of saved and carted items are abandoned across e-commerce, a rate that has changed little over a decade.</div>
+  
+    <a href="https://baymard.com/lists/cart-abandonment-rate" target="_blank" rel="noopener">baymard.com/lists/cart-abandonment-rate — 70.22% meta-analysis of 50 studies</a><br>
+    <a href="https://www.zipchat.ai/blog/cart-abandonment-benchmarks-and-causes" target="_blank" rel="noopener">2026 cart-abandonment benchmarks and causes</a>
+  </div>
+</div>
+
+<div class="s" id="s11">
+  <div class="n">11</div>
+  <div class="t">
+    <div class="ttl">Apparel return-rate benchmarks</div>
+    <div class="meta">NRF, Coresight and 2026 returns benchmarks</div>
+    <div class="use"><b>Supports:</b> roughly 25% of online apparel orders are returned — the highest rate of any e-commerce category.</div>
+  
+    <a href="https://www.statista.com/chart/34373/most-returned-product-categories-purchased-online/" target="_blank" rel="noopener">Statista — clothing and shoes are the most returned online purchases</a><br>
+    <a href="https://www.richpanel.com/learn/ecommerce-return-rates" target="_blank" rel="noopener">2026 return-rate benchmarks by category (Coresight: 24.4% US online apparel)</a><br>
+    <a href="https://nrf.com/research/2025-retail-returns-landscape" target="_blank" rel="noopener">NRF &amp; Happy Returns — 2025 Retail Returns Landscape (19.3% of online sales)</a>
+  </div>
+</div>
+
+<div class="grp">Competitive audit</div>
+
+<div class="s" id="s12">
+  <div class="n">12</div>
+  <div class="t">
+    <div class="ttl">AI-driven product recommendations in Indian fashion apps</div>
+    <div class="meta">Glance</div>
+    <div class="use"><b>Supports:</b> Myntra runs AI styling suggestions on product detail pages; Ajio recommends similar styles based on browsing depth, price filters and cart patterns.</div>
+    <a href="https://glance.com/blogs/glanceai/ai-shopping/ai-driven-product-recommendations" target="_blank" rel="noopener">glance.com — AI-driven product recommendations</a>
+  </div>
+</div>
+
+<div class="s" id="s13">
+  <div class="n">13</div>
+  <div class="t">
+    <div class="ttl">Nykaa's creator-to-commerce ecosystem</div>
+    <div class="meta">FSN E-Commerce Ventures Q1 FY27 investor presentation, reported by BuzzInContent, August 2026</div>
+    <div class="use"><b>Supports:</b> a network of more than 170,000 creators producing over 2.3 million content pieces a year, with tutorials and creator-recommended stores embedded in the shopping app; Nykaa Play past 300,000 subscribers.</div>
+    <a href="https://www.buzzincontent.com/influencer-marketing/nykaa-turns-creator-culture-into-a-content-to-commerce-engine-12231258" target="_blank" rel="noopener">buzzincontent.com — Nykaa's content-to-commerce engine</a>
+  </div>
+</div>
+
+</div>
+
+<div class="note">
+  <b>On the competitor matrix.</b> The wishlist and product-page grids are a hands-on audit of the four apps carried out in August 2026, not a cited source. Sources 12 and 13 support individual cells only. Verify every cell against the current app version before submitting — app features change without announcement.<br><br>
+  <b>On the entries marked for a link.</b> Those figures are real and were used deliberately, but the exact URL still needs attaching. A mentor who asks "where is this from" will accept a publication and a report title; a mentor who asks twice will want the link.
+</div>
+
+
+<div class="pane" id="loop">
+  <div class="loopfig">
+    <h4>What raising wishlist-to-purchase conversion sets off.</h4>
+    <p class="t">Two arms carry revenue and one loops back. Buying more of what was saved lifts purchase frequency and the commission on it, and it produces first-party data on what actually gets bought — which is what advertisers pay for. That same data sharpens discovery, tells sellers what to list, and plans stock and delivery better; those improve the experience and put more worth saving back on the list. The dashed arm is what makes this a project rather than a promotion: a discount lifts conversion once and costs margin every time, while a converted save leaves data behind that makes the next one easier.</p>
+    <svg viewBox="0 0 960 300" aria-label="More saved items bought raises purchase frequency and first-party data; those raise commission and ad revenue; the data also sharpens discovery, seller insight and logistics, which improve the experience and bring more saves">
+      <defs>
+        <marker id="fa" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9AA4AD"/></marker>
+        <marker id="fb" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0072B2"/></marker>
+      </defs>
+      <g class="fl">
+        <path d="M172,120 C205,120 202,42 236,42" marker-end="url(#fa)"/>
+        <path d="M428,40 H468" marker-end="url(#fa)"/>
+        <path d="M660,40 C700,40 700,78 738,78" marker-end="url(#fa)"/>
+        <path d="M172,138 H236" marker-end="url(#fa)"/>
+        <path d="M428,138 H468" marker-end="url(#fa)"/>
+        <path d="M660,138 C700,138 700,104 738,104" marker-end="url(#fa)"/>
+        <path d="M328,170 V202" marker-end="url(#fa)"/>
+        <path d="M328,186 H520 V202" marker-end="url(#fa)"/>
+        <path d="M328,186 H712 V202" marker-end="url(#fa)"/>
+      </g>
+      <g class="fb">
+        <path d="M328,266 V284 H92" marker-end="url(#fb)"/>
+        <path d="M520,266 V284"/><path d="M712,266 V284"/>
+        <path d="M88,202 V170" marker-end="url(#fb)"/>
+      </g>
+      <g class="nd start"><rect x="6" y="104" width="166" height="66" rx="3"/>
+        <text class="t2" x="18" y="124">More saved items</text><text class="t2" x="18" y="139">actually bought</text>
+        <text class="d" x="18" y="156">higher wishlist-to-</text><text class="d" x="18" y="167">purchase conversion</text></g>
+      <g class="nd"><rect x="236" y="16" width="192" height="48" rx="3"/>
+        <text class="t2" x="248" y="36">Higher purchase</text><text class="t2" x="248" y="51">frequency &amp; AOV</text></g>
+      <g class="nd"><rect x="468" y="16" width="192" height="48" rx="3"/>
+        <text class="t2" x="480" y="36">Increase in commission</text><text class="t2" x="480" y="51">from sales</text></g>
+      <g class="nd"><rect x="236" y="108" width="192" height="62" rx="3"/>
+        <text class="t2" x="248" y="128">More first-party data</text><text class="t2" x="248" y="143">on what actually</text><text class="t2" x="248" y="158">gets bought</text></g>
+      <g class="nd"><rect x="468" y="114" width="192" height="48" rx="3"/>
+        <text class="t2" x="480" y="134">Increase in</text><text class="t2" x="480" y="149">ad-related money</text></g>
+      <g class="nd end"><rect x="738" y="54" width="216" height="74" rx="3"/>
+        <text class="t2 inv" x="752" y="80">Increase in revenue</text>
+        <text class="d inv" x="752" y="99">commission · advertising ·</text><text class="d inv" x="752" y="113">lower cost to serve</text></g>
+      <g class="nd fbn"><rect x="236" y="202" width="192" height="64" rx="3"/>
+        <text class="t2" x="248" y="222">Sharper discovery,</text><text class="t2" x="248" y="237">personalised search</text>
+        <text class="d" x="248" y="255">advertisers pay more</text></g>
+      <g class="nd fbn"><rect x="428" y="202" width="192" height="64" rx="3"/>
+        <text class="t2" x="440" y="222">Better insights for</text><text class="t2" x="440" y="237">sellers on what to</text><text class="t2" x="440" y="252">list and when</text></g>
+      <g class="nd fbn"><rect x="620" y="202" width="192" height="64" rx="3"/>
+        <text class="t2" x="632" y="222">Better logistics data</text><text class="t2" x="632" y="237">based on demand</text>
+        <text class="d" x="632" y="255">lower cost to serve</text></g>
+      <g class="nd fbn"><rect x="6" y="202" width="166" height="64" rx="3"/>
+        <text class="t2" x="18" y="222">Better experience</text><text class="t2" x="18" y="237">and more trust</text>
+        <text class="d" x="18" y="255">more worth saving</text></g>
+      <text class="lbl" x="104" y="297">REINFORCING LOOP</text>
+    </svg>
+  </div>
+</div>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.tab')),panes=[].slice.call(document.querySelectorAll('.pane'));
+  function show(id){ if(!panes.some(function(p){return p.id===id;})){id='sources';}
+    panes.forEach(function(p){p.classList.toggle('on',p.id===id);});
+    tabs.forEach(function(t){t.classList.toggle('on',t.getAttribute('data-pane')===id);}); }
+  tabs.forEach(function(t){t.addEventListener('click',function(e){e.preventDefault();
+    var id=t.getAttribute('data-pane');show(id);window.scrollTo(0,0);
+    try{history.replaceState(null,'','#'+id);}catch(err){}});});
+  function fromHash(){
+    var h=(window.location.hash||'').replace('#','');
+    show(h||'sources');
+    if(h && !panes.some(function(p){return p.id===h;})){
+      var el=document.getElementById(h);
+      if(el){ el.scrollIntoView(); }
+    }
+  }
+  fromHash();window.addEventListener('hashchange',fromHash);
+})();
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slide 3 · Supporting artefact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2;--card:#fff;--ink:#14161A;--ink2:#535A63;--faint:#858D96;
+  --rule:#DCE2E7;--track:#C1CBD3;
+  --win:#0072B2;--leak:#D55E00;--dead:#7C858E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.45;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1700px;margin:0 auto;padding:40px 22px 60px}
+.narrow{max-width:1180px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:14px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;color:var(--faint);margin-bottom:9px}
+.eyebrow b{color:var(--win);font-weight:600}
+h1{font-family:'Archivo',sans-serif;font-weight:800;
+  font-variation-settings:'wdth' 106,'wght' 790;
+  font-size:27px;line-height:1.14;letter-spacing:-.012em;max-width:36ch}
+.sub{margin-top:10px;color:var(--ink2);font-size:13.3px;max-width:104ch}
+
+/* tabs */
+.tabs{display:flex;margin:0 0 16px;border-bottom:1px solid var(--rule)}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--faint);background:none;border:none;border-bottom:3px solid transparent;
+  padding:13px 18px;cursor:pointer}
+.tab:hover{color:var(--ink2)}
+.tab.on{color:var(--ink);border-bottom-color:var(--win)}
+.pane{display:none}
+.pane.on{display:block}
+
+.panel{background:var(--card);border:1px solid var(--rule);padding:20px 22px 24px;margin-bottom:12px}
+.panel.scroll{padding:14px 16px}
+.panel.scroll{overflow-x:auto}
+h2{font-family:'Archivo',sans-serif;font-weight:700;
+  font-variation-settings:'wdth' 104,'wght' 720;
+  font-size:18px;line-height:1.2;letter-spacing:-.008em;margin-bottom:9px}
+.q{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.09em;color:var(--ink);margin-bottom:10px}
+.q b{color:var(--win);font-weight:600}
+p.t{color:var(--ink2);font-size:13px;line-height:1.5;margin-bottom:11px;max-width:110ch}
+p.t:last-child{margin-bottom:0}
+p.t b{color:var(--ink);font-weight:600}
+p.t em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--win)}
+p.t em.bad{color:var(--leak)}
+
+.key{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--win);
+  padding:12px 16px;margin-bottom:12px;display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.key .kk{display:flex;gap:8px;align-items:center;font-size:12.4px;color:var(--ink2)}
+.key .kk b{color:var(--ink);font-weight:600}
+.sw{width:12px;height:12px;flex:0 0 auto}
+.sw.win{background:var(--win)}.sw.mid{background:#F5F8FA;border:1px solid var(--track)}
+.sw.root{background:var(--ink)}
+.opk{display:inline-flex;width:19px;height:19px;border-radius:50%;background:var(--card);
+  border:1px solid var(--track);align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--ink2);flex:0 0 auto}
+
+/* ---------- left-to-right tree ---------- */
+.ltr{padding:2px 0;min-width:1400px}
+.node{display:flex;align-items:center}
+.bx{flex:0 0 176px;width:176px;border:1px solid var(--rule);background:#FAFBFC;
+  padding:5px 8px;font-size:10.7px;line-height:1.26}
+.bx b{font-weight:600;display:block}
+.bx i{font-style:normal;color:var(--ink2);display:block;margin-top:1px;font-size:9.8px;line-height:1.25}
+.bx .op{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--faint);
+  letter-spacing:.07em;display:block;margin-top:3px}
+.bx.root{flex-basis:196px;width:196px;background:var(--ink);border-color:var(--ink);color:#fff;padding:8px 10px}
+.bx.root b{font-size:11.8px}
+.bx.root i{color:#AEB7BF}
+.bx.root .op{color:#8D97A1}
+.bx.br{background:#F5F8FA;border-left:3px solid var(--dead)}
+.bx.leaf{background:#EDF5FA;border:1px solid #BCD9EC;border-left:3px solid var(--win)}
+.bx.leaf .code{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  font-weight:600;color:#fff;background:var(--win);padding:0 5px;margin-right:5px}
+.bx.leaf .drop{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--leak);
+  display:block;margin-top:3px;letter-spacing:.05em}
+
+.kids{display:flex;flex-direction:column;justify-content:center;padding-left:26px;position:relative}
+.kid{position:relative;padding:2px 0}
+.kid::before{content:'';position:absolute;left:-26px;top:50%;width:26px;border-top:1px solid var(--track)}
+.kid::after{content:'';position:absolute;left:-26px;top:0;bottom:0;border-left:1px solid var(--track)}
+.kid:first-child::after{top:50%}
+.kid:last-child::after{bottom:50%}
+.kid:only-child::after{display:none}
+.opr{position:relative;height:15px}
+.opr::after{content:'';position:absolute;left:-26px;top:0;bottom:0;border-left:1px solid var(--track)}
+.opr .sym{position:absolute;left:-26px;top:50%;transform:translate(-50%,-50%);
+  width:17px;height:17px;border-radius:50%;background:var(--card);border:1px solid var(--track);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:var(--ink2)}
+
+/* bars */
+.wr{display:grid;grid-template-columns:190px 1fr 90px;gap:12px;align-items:center;padding:4px 0}
+.wr .wl{font-size:12.8px;font-weight:600}
+.wr .wl i{font-style:normal;font-family:'IBM Plex Mono',monospace;color:var(--dead);font-weight:600;margin-right:7px}
+.wr.sel .wl i{color:var(--win)}
+.wr .wt{background:#DDE3E8;height:16px}
+.wr .wf{height:16px;background:var(--dead)}
+.wr.sel .wf{background:var(--win)}
+.wr .wv{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:var(--dead);text-align:right}
+.wr.sel .wv{color:var(--win)}
+.wr .wv em{font-style:normal;color:var(--faint);font-weight:400;font-size:10.5px;display:block}
+
+.ivr{display:grid;grid-template-columns:190px 1fr 60px;gap:12px;align-items:center;padding:4px 0}
+.ivr .il{font-size:12.8px}
+.ivr .it{background:#F2F5F7;height:16px;position:relative;border:1px solid var(--rule)}
+.ivr .if{height:14px;background:var(--dead);opacity:.55}
+.ivr .mk{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--leak)}
+.ivr .iv{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;text-align:right}
+.invkey{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--faint);
+  margin:7px 0 10px;display:flex;gap:6px;align-items:center}
+.invkey s{text-decoration:none;color:var(--leak);font-weight:600}
+
+.fbar{display:flex;height:26px;width:100%;overflow:hidden}
+.seg{display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#fff}
+.seg.a{background:var(--win)}.seg.b{background:var(--leak)}.seg.c{background:var(--dead)}
+.funkey{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0 10px;font-size:12px;color:var(--ink2)}
+.funkey i{font-style:normal;display:inline-block;width:9px;height:9px;margin-right:5px}
+.funkey i.a{background:var(--win)}.funkey i.b{background:var(--leak)}
+.funkey b{color:var(--ink);font-weight:600}
+
+table.t{width:100%;border-collapse:collapse;font-size:12.7px;margin-bottom:11px}
+table.t th{font-family:'IBM Plex Mono',monospace;font-size:10.4px;font-weight:600;
+  letter-spacing:.06em;color:var(--faint);text-align:right;padding:0 0 6px 14px;
+  border-bottom:1px solid var(--rule);white-space:nowrap}
+table.t th:first-child{text-align:left;padding-left:0;width:99%}
+table.t td{padding:7px 0 7px 14px;border-bottom:1px solid #EEF1F4;text-align:right;vertical-align:top}
+table.t td:first-child{text-align:left;padding-left:0}
+table.t tr:last-child td{border-bottom:none}
+table.t td.n{font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap}
+table.t td.n.up{color:var(--win)}table.t td.n.dn{color:var(--leak)}table.t td.n.fl{color:var(--dead)}
+table.t td .why{display:block;color:var(--ink2);font-size:11.7px;line-height:1.38;margin-top:2px;font-weight:400}
+table.t td b{font-weight:600}
+table.t tr.top td{background:#F5F8FA}
+table.t tr.top td:first-child{box-shadow:inset 3px 0 0 var(--win);padding-left:9px}
+
+.pair{display:flex;gap:14px;align-items:center;border:1px solid var(--rule);padding:9px 12px;margin-bottom:7px}
+.pair .pt{flex:1 1 auto;font-size:12.6px;line-height:1.4}
+.pair .pt b{font-weight:600}.pair .pt span{color:var(--ink2)}
+.pair .pv{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;
+  color:var(--win);flex:0 0 auto;text-align:right;line-height:1.1}
+.pair.neg .pv{color:var(--leak)}
+.pair .pv em{font-style:normal;display:block;font-size:10px;color:var(--faint);font-weight:400;margin-top:2px}
+
+.band{border-left:3px solid var(--win);background:#F5F8FA;padding:10px 13px;
+  font-size:12.8px;color:var(--ink);margin-bottom:11px}
+.band.warn{border-left-color:var(--leak);background:#FDF6F1}
+.band .num{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--win)}
+.band.warn .num{color:var(--leak)}
+.band:last-child{margin-bottom:0}
+
+.comp{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;margin-bottom:11px}
+.cmp{border:1px solid var(--rule);border-top:3px solid var(--win);padding:9px 11px}
+.cmp.no{border-top-color:var(--leak)}
+.cmp b{display:block;font-weight:600;font-size:12.6px;margin-bottom:3px}
+.cmp span{color:var(--ink2);font-size:11.9px;line-height:1.35}
+.cmp .w{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--faint);display:block;margin-top:5px}
+
+.lnkout{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-top:14px}
+.lnkout a{color:var(--win);text-decoration:none;border-bottom:1px solid var(--track)}
+.foot{margin-top:14px;font-size:12px;color:var(--faint);line-height:1.5;max-width:130ch}
+.foot b{color:var(--ink2);font-weight:600}
+@media print{body{background:#fff}.wrap{padding:0}.pane{display:block!important}.tabs{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow"><b>SUPPORTING ARTEFACT</b> · LINKED FROM SLIDE 3</div>
+    <h1>The full working behind slide 3.</h1>
+    <p class="sub">Two things kept off the slide so it stays readable: the complete metric decomposition, and the evidence behind choosing one drop-off point out of four.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="kpi-tree" type="button">KPI TREE</button>
+    <button class="tab" data-pane="analysis" type="button">HOW THE DROP-OFF WAS CHOSEN</button>
+  </div>
+
+  <!-- ==================== TAB 1 · KPI TREE ==================== -->
+  <div class="pane on" id="kpi-tree">
+
+    <div class="key">
+      <div class="kk"><span class="sw root"></span><b>The goal</b></div>
+      <div class="kk"><span class="sw mid"></span><b>Sub-metric</b> — decomposes further</div>
+      <div class="kk"><span class="sw win"></span><b>Leading indicator</b> — one behaviour, one drop-off</div>
+      <div class="kk"><span class="opk">÷</span><span class="opk">×</span><span class="opk">+</span><b>&nbsp;How the children combine</b> into the parent</div>
+    </div>
+
+    <div class="panel scroll">
+      <div class="ltr">
+
+        <div class="node">
+          <div class="bx root">
+            <b>Wishlist-to-purchase conversion</b>
+            <i>% who buy ≥1 saved item within 30 days</i>
+            <span class="op">THE GOAL</span>
+          </div>
+          <div class="kids">
+
+            <!-- NUMERATOR -->
+            <div class="kid">
+              <div class="node">
+                <div class="bx br">
+                  <b># users purchasing at least one item within 30 days of adding it</b>
+                  <span class="op">NUMERATOR</span>
+                </div>
+                <div class="kids">
+
+                  <div class="kid">
+                    <div class="node">
+                      <div class="bx br"><b># wishlist page opens</b></div>
+                      <div class="kids">
+                        <div class="kid"><div class="bx"># app opens</div></div>
+                        <div class="opr"><span class="sym">×</span></div>
+                        <div class="kid">
+                          <div class="bx leaf"><span class="code">A</span><b style="display:inline">% wishlist button clicks</b>
+                            <span class="drop">DROP-OFF A</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="opr"><span class="sym">×</span></div>
+
+                  <div class="kid">
+                    <div class="node">
+                      <div class="bx br"><b>% users who purchased a wishlisted item</b></div>
+                      <div class="kids">
+
+                        <div class="kid"><div class="bx"># users who purchased via ‘Buy Now’</div></div>
+
+                        <div class="opr"><span class="sym">+</span></div>
+
+                        <div class="kid">
+                          <div class="node">
+                            <div class="bx br"><b># users who purchased via ‘Add to Bag’</b></div>
+                            <div class="kids">
+
+                              <div class="kid">
+                                <div class="node">
+                                  <div class="bx br"><b># users who added the wishlisted item to the bag</b></div>
+                                  <div class="kids">
+
+                                    <div class="kid">
+                                      <div class="node">
+                                        <div class="bx br"><b># users who found the item they were searching for</b></div>
+                                        <div class="kids">
+                                          <div class="kid"><div class="bx"># users who opened the wishlist</div></div>
+                                          <div class="opr"><span class="sym">×</span></div>
+                                          <div class="kid">
+                                            <div class="bx leaf"><span class="code">B</span><b style="display:inline">% who found and clicked the item they came for</b>
+                                              <span class="drop">DROP-OFF B</span></div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="opr"><span class="sym">×</span></div>
+
+                                    <div class="kid">
+                                      <div class="bx leaf"><span class="code">C</span><b style="display:inline">% users who clicked ‘Add to Bag’</b>
+                                        <span class="drop">DROP-OFF C</span></div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="opr"><span class="sym">×</span></div>
+
+                              <div class="kid">
+                                <div class="node">
+                                  <div class="bx br"><b>% users who purchased an item once it is added to the bag</b></div>
+                                  <div class="kids">
+                                    <div class="kid"><div class="bx"># users who open the bag after the item is added</div></div>
+                                    <div class="opr"><span class="sym">×</span></div>
+                                    <div class="kid">
+                                      <div class="bx leaf"><span class="code">D</span><b style="display:inline"># users who purchase the bag items</b>
+                                        <span class="drop">DROP-OFF D</span></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="opr"><span class="sym">÷</span></div>
+
+            <!-- DENOMINATOR -->
+            <div class="kid">
+              <div class="node">
+                <div class="bx br">
+                  <b># users who added an item to the wishlist while browsing</b>
+                  <span class="op">DENOMINATOR</span>
+                </div>
+                <div class="kids">
+                  <div class="kid"><div class="bx"># users who searched or browsed for an item</div></div>
+                  <div class="opr"><span class="sym">×</span></div>
+                  <div class="kid"><div class="bx">browse-to-wishlist conversion</div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="foot">
+      <b>How to read it.</b> Read right to left: the children on the right combine, using the operator on the line joining them, into the parent on their left. <b>×</b> is a chain — each stage of the funnel multiplies the one before it, so a metric is the population that reached it times the rate at which they pass. <b>+</b> is a split — ‘Buy Now’ and ‘Add to Bag’ are two separate routes to the same purchase, so they add. <b>÷</b> appears once, at the goal itself, which is a rate: purchasers over savers.<br><br>
+      The tree has two sides. The denominator is the input side — how many items get saved at all. This project holds it constant and works only on the numerator, because the goal counts purchases <i>from</i> the wishlist, not the size of the wishlist. The four blue nodes are the only ones that describe a single thing a user does or fails to do, which is why they, and not their parents, become the candidate product outcomes on slide 3.
+    </div>
+
+  </div>
+
+  <!-- ==================== TAB 2 · ANALYSIS ==================== -->
+  <div class="pane" id="analysis">
+    <div class="narrow">
+
+    <div class="panel">
+      <div class="q"><b>01</b> · Why public conversation stands in for the data</div>
+      <h2>There was no in-app drop-off rate to read, so shoppers were read instead.</h2>
+      <p class="t">Choosing between four candidate product outcomes would ordinarily be settled by which one leaks most users. That data was not provided. The discovery engine collected <b>12,002</b> public posts and reviews across Reddit, YouTube, Google Play and the Apple App Store, kept the <b>1,018</b> that bear on saving and buying, and tagged each with the drop-off point it describes and the doubt it raises.</p>
+      <p class="t"><b>What that buys, and what it costs.</b> It gives reasons in the shopper's own words, which no funnel chart can. It does not give a drop-off rate — every share below is a share of <i>conversation</i>, describing where attention sits rather than a population being whittled down. The three tests that follow exist because of exactly that weakness.</p>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>02</b> · Test one — where the talk is</div>
+      <h2>One drop-off carries more than the other three combined, several times over.</h2>
+      <div class="wr sel"><div class="wl"><i>C</i>Did not add to bag</div><div class="wt"><div class="wf" style="width:80%"></div></div><div class="wv">80%<em>745 records</em></div></div>
+      <div class="wr"><div class="wl"><i>A</i>Did not come back</div><div class="wt"><div class="wf" style="width:12%"></div></div><div class="wv">12%<em>111 records</em></div></div>
+      <div class="wr"><div class="wl"><i>D</i>Did not pay</div><div class="wt"><div class="wf" style="width:5%"></div></div><div class="wv">5%<em>50 records</em></div></div>
+      <div class="wr"><div class="wl"><i>B</i>Could not find it</div><div class="wt"><div class="wf" style="width:3%"></div></div><div class="wv">3%<em>29 records</em></div></div>
+      <p class="t" style="margin-top:11px">A record can raise doubts at more than one drop-off, so these do not describe a funnel and no funnel is drawn. On its own this proves only that C is the <i>loudest</i>, which is not the same claim.</p>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>03</b> · Test two — the loudness test</div>
+      <h2>How wrong would we have to be for the answer to change?</h2>
+      <p class="t">Two of the four drop-offs are silent by construction. Nobody posts about a wishlist they forgot, and nobody writes a review complaining that a list was hard to scroll — they just search for the item again. So volume alone would be the easiest possible way to get this wrong.</p>
+      <p class="t">The test inverts the question: <b>how badly would each quiet drop-off have to be under-reported before it overtook C?</b></p>
+      <div class="ivr"><div class="il">A · Did not come back</div><div class="it"><div class="if" style="width:26.4%"></div><div class="mk" style="left:12%"></div></div><div class="iv">6.6×</div></div>
+      <div class="ivr"><div class="il">D · Did not pay</div><div class="it"><div class="if" style="width:58%"></div><div class="mk" style="left:12%"></div></div><div class="iv">14.5×</div></div>
+      <div class="ivr"><div class="il">B · Could not find it</div><div class="it"><div class="if" style="width:100%"></div><div class="mk" style="left:12%"></div></div><div class="iv">25.0×</div></div>
+      <div class="invkey"><s>▌</s> 3× — as much hidden silence as can plausibly be argued for</div>
+      <p class="t">The closest call is <b>A</b> at <em>6.6×</em>, more than double the 3× line. <b>C holds even if this corpus is completely deaf to the quiet drop-offs.</b> The test does not prove A is small — it proves A cannot be large enough to change the decision.</p>
+      <div class="band warn"><b>The standing caveat.</b> A's <span class="num">12%</span> is a floor, not an estimate. If in-app data later shows drop-off A larger than this corpus can see, the choice should be re-run against it rather than defended.</div>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>04</b> · Test three — is there anything left to win back</div>
+      <h2>A drop-off is only worth building for if the shopper still wants the item.</h2>
+      <p class="t">Each record is marked <b>deferred</b> — the purchase was postponed and the item is still wanted — or <b>exited</b>, where the intent was destroyed. Below is drop-off C.</p>
+      <div class="fbar">
+        <div class="seg a" style="width:70.6%">71% deferred — 526</div>
+        <div class="seg b" style="width:26.7%">27% exited — 199</div>
+        <div class="seg c" style="width:2.7%"></div>
+      </div>
+      <div class="funkey">
+        <span><i class="a"></i><b>Deferred</b> — postponed, still wanted</span>
+        <span><i class="b"></i><b>Exited</b> — intent destroyed</span>
+        <span>20 records unclear</span>
+      </div>
+      <table class="t">
+        <thead><tr><th>Drop-off</th><th>Records</th><th>Deferred</th><th>Exited</th></tr></thead>
+        <tbody>
+          <tr class="top"><td><b>C · Did not add to bag</b></td><td class="n fl">745</td><td class="n up">526</td><td class="n dn">199</td></tr>
+          <tr><td>A · Did not come back</td><td class="n fl">111</td><td class="n">107</td><td class="n">3</td></tr>
+          <tr><td>D · Did not pay</td><td class="n fl">50</td><td class="n">0</td><td class="n dn">50</td></tr>
+          <tr><td>B · Could not find it</td><td class="n fl">29</td><td class="n">21</td><td class="n">8</td></tr>
+        </tbody>
+      </table>
+      <p class="t"><b>526</b> of the <b>669</b> deferrals in the entire corpus — <em>79%</em> — sit inside drop-off C. Drop-off D is the mirror image: all <b>50</b> of its records are exits and <em class="bad">none</em> a deferral, so a fix there recovers a shopper who has already decided against the purchase.</p>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>05</b> · Inside C — the doubts in shoppers' own words</div>
+      <h2>Six doubts carry the weight, out of 33 that were tested.</h2>
+      <p class="t">The list of 33 was frozen and version-stamped before a single record was read, so it could not be tuned to fit what turned up. Share is of all <b>1,018</b> relevant records; a record can carry more than one doubt.</p>
+      <table class="t">
+        <thead><tr><th>What the shopper is thinking</th><th>Share</th><th>Records</th><th>People</th></tr></thead>
+        <tbody>
+          <tr class="top"><td><b>“Will the fabric and colour actually look like the photos?”</b><span class="why">Photographs cannot carry weight, drape, texture or true colour — so looking again produces no new evidence</span></td><td class="n up">23.7%</td><td class="n fl">241</td><td class="n fl">226</td></tr>
+          <tr><td><b>“Is this the right price, and is now the right time?”</b><span class="why">No price history or anchor, so any price could be the wrong one</span></td><td class="n">20.3%</td><td class="n fl">207</td><td class="n fl">189</td></tr>
+          <tr><td><b>“Which size, when every brand runs different?”</b><span class="why">No confident size choice exists, so the decision is put off rather than made</span></td><td class="n">18.6%</td><td class="n fl">189</td><td class="n fl">185</td></tr>
+          <tr><td><b>“Will it look good on me, with what I already own?”</b><span class="why">Model imagery answers “is this good”, not “is this good on me”</span></td><td class="n">15.1%</td><td class="n fl">154</td><td class="n fl">142</td></tr>
+          <tr><td><b>“If it's wrong, how painful is sending it back?”</b><span class="why">The effort of a return is priced into the decision before it is made</span></td><td class="n">13.8%</td><td class="n fl">140</td><td class="n fl">137</td></tr>
+          <tr><td><b>“What did people who actually received it say?”</b><span class="why">On-platform reviews too few, too old or photo-less to settle the question</span></td><td class="n">8.1%</td><td class="n fl">82</td><td class="n fl">80</td></tr>
+        </tbody>
+      </table>
+      <p class="t"><b>Inside the biggest one.</b> Of the 241 records raising fabric and colour, <b>61%</b> doubt build quality at the price, <b>36%</b> cannot judge weight, drape or texture from photographs, <b>15%</b> expect the delivered colour to differ from the screen, and <b>11%</b> suspect the photos are styled or retouched. These add to more than 100% because a record can carry several.</p>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>06</b> · Which doubts come together</div>
+      <h2>Some of these are one problem wearing two names.</h2>
+      <p class="t">Where two doubts appear in the same record far more often than chance allows, they are usually one compound problem with one fix. The figure compares two rates: how often the second doubt appears among people who raised the first, against how often anyone raises it at all. <b>Above 1.0× means they come together; below 1.0× means they pull apart.</b></p>
+      <div class="pair"><span class="pt"><b>Return risk</b> <span>comes with</span> <b>material truth</b><span> — a shopper worried about the hassle of sending something back is twice as likely as anyone else to also doubt the fabric.</span></span><span class="pv">2.0×<em>65 records</em></span></div>
+      <div class="pair neg"><span class="pt"><b>Return risk</b> <span>does not come with</span> <b>price &amp; timing</b><span> — and is in fact <i>rarer</i> than chance among price-sensitive shoppers.</span></span><span class="pv">0.7×<em>21 records</em></span></div>
+      <div class="band"><b>Read together, those two say something the intuitive story gets wrong.</b> “Returns are a hassle” is not a complaint about cost and does not belong with price. It is the shopper asking <i>what happens if the fabric turns out wrong and I have to send it back</i> — so return anxiety is downstream of material doubt, and fixing the material question takes the return question with it.</div>
+      <div class="pair"><span class="pt"><b>Size &amp; fit</b> <span>comes with</span> <b>needing someone else's approval</b><span> — the shopper who cannot settle a size question hands the decision to another person, and the wait for their reply is what the delay actually consists of.</span></span><span class="pv">2.9×<em>37 records</em></span></div>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>07</b> · How opportunity was scored</div>
+      <h2>Five questions, equally weighted, and a check that the weights are not doing the work.</h2>
+      <p class="t">Volume alone would put price second. Each doubt therefore scores <b>0 to 1</b> on five questions, and the five are added together. Every weight starts at <b>1.00</b> and is exposed as a slider rather than hard-coded, so a reader who disagrees can move it and watch the order change.</p>
+      <div class="comp">
+        <div class="cmp"><b>How often it comes up</b><span>Share of relevant records that raise it</span><span class="w">weight 1.00</span></div>
+        <div class="cmp"><b>How hard people work around it</b><span>Whether they leave the app, ask a person, or order two sizes to compare</span><span class="w">weight 1.00</span></div>
+        <div class="cmp"><b>Whether intent survives it</b><span>Deferred rather than exited — is the shopper still winnable</span><span class="w">weight 1.00</span></div>
+        <div class="cmp no"><b>Whether it is fixable without a discount</b><span>The project's own constraint, built into the score rather than applied afterwards</span><span class="w">weight 1.00</span></div>
+        <div class="cmp"><b>How well evidenced it is</b><span>Record count, distinct authors, classifier confidence, agreement with a human coder</span><span class="w">weight 1.00</span></div>
+      </div>
+      <table class="t">
+        <thead><tr><th>Doubt</th><th>Share of talk</th><th>Rank · volume</th><th>Rank · opportunity</th></tr></thead>
+        <tbody>
+          <tr class="top"><td><b>Material truth</b> — fabric, colour, build quality<span class="why">Fixable without touching price, and the workarounds people use all leave the app</span></td><td class="n fl">23.7%</td><td class="n fl">1st</td><td class="n up">1st</td></tr>
+          <tr><td><b>Price &amp; timing</b><span class="why">Scores 0.50 on fixable-without-a-discount — its only real remedy is the one the brief rules out</span></td><td class="n fl">20.3%</td><td class="n fl">2nd</td><td class="n dn">6th</td></tr>
+          <tr><td><b>Size &amp; fit</b><span class="why">Fully fixable without money</span></td><td class="n fl">18.6%</td><td class="n fl">3rd</td><td class="n up">2nd</td></tr>
+          <tr><td><b>Styling &amp; self-image</b><span class="why">Fully fixable without money</span></td><td class="n fl">15.1%</td><td class="n fl">4th</td><td class="n up">3rd</td></tr>
+          <tr><td><b>Return risk</b><span class="why">Partly a policy and logistics cost rather than a product fix — scores 0.50</span></td><td class="n fl">13.8%</td><td class="n fl">5th</td><td class="n dn">9th</td></tr>
+          <tr><td><b>Buyer proof</b><span class="why">Smaller, but entirely solvable on the product page</span></td><td class="n fl">8.1%</td><td class="n fl">6th</td><td class="n up">4th</td></tr>
+        </tbody>
+      </table>
+      <div class="band">The order barely depends on the weighting. The whole ranking was re-run <span class="num">1,000</span> times with every weight nudged up or down by as much as 30%, and material truth held first place in <span class="num">1,000 of 1,000</span> of them. Nothing below 30 records is ranked at all, however good its score looks.</div>
+    </div>
+
+    <div class="panel">
+      <div class="q"><b>08</b> · What this cannot tell you</div>
+      <h2>Where the evidence is thin, said plainly.</h2>
+      <table class="t">
+        <thead><tr><th>Doubt</th><th>κ</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>“Which size, when every brand runs different?”</td><td class="n up">0.66</td><td>human coder agrees</td></tr>
+          <tr><td>“Is this the right price, and is now the right time?”</td><td class="n up">0.64</td><td>human coder agrees</td></tr>
+          <tr><td>“Will it look good on me, with what I already own?”</td><td class="n">0.52</td><td>human agrees less often</td></tr>
+          <tr class="top"><td><b>“Will the fabric and colour actually look like the photos?”</b></td><td class="n dn">0.43</td><td>human agrees less often</td></tr>
+          <tr><td>“I need to check with my partner before I buy this.”</td><td class="n dn">0.10</td><td>human disagreed — a lead, not a finding</td></tr>
+        </tbody>
+      </table>
+      <p class="t"><b>κ</b> is agreement between the classifier and a human coder after chance is removed: 0 is a coin flip, 1 is perfect, and 0.60 is the usual bar for reliable. A person hand-labelled a blind sample of <b>59</b> records without seeing what the machine decided.</p>
+      <div class="band warn"><b>The winning doubt sits at <span class="num">κ 0.43</span>, under the bar.</b> Its rank survives — it leads on volume, on workaround effort and on surviving intent, none of which depend on that boundary. What does not survive is its edge against neighbouring doubts: where “the fabric looks wrong” ends and “the quality looks cheap” begins is not yet settled. That is the first thing the interviews are built to answer.</div>
+      <div class="band warn"><b>Structural limits.</b> Every share is a share of conversation, not a drop-off rate. There is no user-level, funnel or revenue data in this corpus. Doubts nobody posts about are under-counted by construction, and the largest of those is forgetting. Roughly a third of the relevant material is Myntra-specific; the rest is Indian online fashion generally.</div>
+    </div>
+
+    <div class="lnkout">LIVE ENGINE · <a href="https://myntra-discovery-engine-p62azqwfs4r93yn2rx7qgx.streamlit.app" target="_blank" rel="noopener">myntra-discovery-engine-p62azqwfs4r93yn2rx7qgx.streamlit.app</a> — every figure above opens the records behind it</div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  function show(id){
+    if(!document.getElementById(id)){ id = 'kpi-tree'; }
+    panes.forEach(function(p){
+      if(p.id === id){ p.classList.add('on'); } else { p.classList.remove('on'); }
+    });
+    tabs.forEach(function(t){
+      if(t.getAttribute('data-pane') === id){ t.classList.add('on'); } else { t.classList.remove('on'); }
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = t.getAttribute('data-pane');
+      show(id);
+      window.scrollTo(0,0);
+      try { history.replaceState(null, '', '#' + id); } catch(err) { /* file:// blocks this */ }
+    });
+  });
+  function fromHash(){
+    var h = (window.location.hash || '').replace('#','');
+    show(h || 'kpi-tree');
+  }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+})();
+</script>
+</body>
+</html>
